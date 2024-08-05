@@ -1,0 +1,67 @@
+diff -rupN linux-6.11-rc2/drivers/pci/pci-driver.c linux-6.11-rc2p/drivers/pci/pci-driver.c
+--- linux-6.11-rc2/drivers/pci/pci-driver.c	2024-08-04 22:50:53.000000000 +0200
++++ linux-6.11-rc2p/drivers/pci/pci-driver.c	2024-08-05 15:34:02.503062270 +0200
+@@ -505,6 +505,9 @@ static void pci_device_shutdown(struct d
+ 	struct pci_dev *pci_dev = to_pci_dev(dev);
+ 	struct pci_driver *drv = pci_dev->driver;
+ 
++	if (pci_dev->no_shutdown)
++		return;
++
+ 	pm_runtime_resume(dev);
+ 
+ 	if (drv && drv->shutdown)
+diff -rupN linux-6.11-rc2/drivers/pci/quirks.c linux-6.11-rc2p/drivers/pci/quirks.c
+--- linux-6.11-rc2/drivers/pci/quirks.c	2024-08-04 22:50:53.000000000 +0200
++++ linux-6.11-rc2p/drivers/pci/quirks.c	2024-08-05 15:34:02.505062281 +0200
+@@ -6277,3 +6277,39 @@ static void pci_mask_replay_timer_timeou
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_GLI, 0x9750, pci_mask_replay_timer_timeout);
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_GLI, 0x9755, pci_mask_replay_timer_timeout);
+ #endif
++
++static const struct dmi_system_id no_shutdown_dmi_table[] = {
++	/*
++	 * Systems on which some devices should not be touched during shutdown.
++	 */
++	{
++		.ident = "Microsoft Surface Pro 9",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Surface Pro 9"),
++		},
++	},
++	{
++		.ident = "Microsoft Surface Laptop 5",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Surface Laptop 5"),
++		},
++	},
++	{}
++};
++
++static void quirk_no_shutdown(struct pci_dev *dev)
++{
++	if (!dmi_check_system(no_shutdown_dmi_table))
++		return;
++
++	dev->no_shutdown = 1;
++	pci_info(dev, "disabling shutdown ops for [%04x:%04x]\n",
++		 dev->vendor, dev->device);
++}
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x461e, quirk_no_shutdown);  // Thunderbolt 4 USB Controller
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x461f, quirk_no_shutdown);  // Thunderbolt 4 PCI Express Root Port
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x462f, quirk_no_shutdown);  // Thunderbolt 4 PCI Express Root Port
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x466d, quirk_no_shutdown);  // Thunderbolt 4 NHI
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x46a8, quirk_no_shutdown);  // GPU
+diff -rupN linux-6.11-rc2/include/linux/pci.h linux-6.11-rc2p/include/linux/pci.h
+--- linux-6.11-rc2/include/linux/pci.h	2024-08-04 22:50:53.000000000 +0200
++++ linux-6.11-rc2p/include/linux/pci.h	2024-08-05 15:34:02.506062287 +0200
+@@ -466,6 +466,7 @@ struct pci_dev {
+ 	unsigned int	no_command_memory:1;	/* No PCI_COMMAND_MEMORY */
+ 	unsigned int	rom_bar_overlap:1;	/* ROM BAR disable broken */
+ 	unsigned int	rom_attr_enabled:1;	/* Display of ROM attribute enabled? */
++	unsigned int	no_shutdown:1;		/* Do not touch device on shutdown */
+ 	pci_dev_flags_t dev_flags;
+ 	atomic_t	enable_cnt;	/* pci_enable_device has been called */
+ 
