@@ -1,6 +1,6 @@
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/cmd.c linux-6.11-rc2p/drivers/hid/ipts/cmd.c
---- linux-6.11-rc2/drivers/hid/ipts/cmd.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/cmd.c	2024-08-05 15:14:49.823964553 +0200
+diff -rupN a/drivers/hid/ipts/cmd.c b/drivers/hid/ipts/cmd.c
+--- a/drivers/hid/ipts/cmd.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/cmd.c	2024-09-09 00:43:55.775444894 +0200
 @@ -0,0 +1,61 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -63,9 +63,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/cmd.c linux-6.11-rc2p/drivers/hid/ipt
 +	dev_dbg(ipts->dev, "Sending 0x%02X with %ld bytes payload\n", code, size);
 +	return ipts_mei_send(&ipts->mei, &cmd, sizeof(cmd.cmd) + size);
 +}
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/cmd.h linux-6.11-rc2p/drivers/hid/ipts/cmd.h
---- linux-6.11-rc2/drivers/hid/ipts/cmd.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/cmd.h	2024-08-05 15:14:49.823964553 +0200
+diff -rupN a/drivers/hid/ipts/cmd.h b/drivers/hid/ipts/cmd.h
+--- a/drivers/hid/ipts/cmd.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/cmd.h	2024-09-09 00:43:55.775444894 +0200
 @@ -0,0 +1,60 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -127,9 +127,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/cmd.h linux-6.11-rc2p/drivers/hid/ipt
 +int ipts_cmd_send(struct ipts_context *ipts, enum ipts_command_code code, void *data, size_t size);
 +
 +#endif /* IPTS_CMD_H */
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/context.h linux-6.11-rc2p/drivers/hid/ipts/context.h
---- linux-6.11-rc2/drivers/hid/ipts/context.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/context.h	2024-08-05 15:14:49.823964553 +0200
+diff -rupN a/drivers/hid/ipts/context.h b/drivers/hid/ipts/context.h
+--- a/drivers/hid/ipts/context.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/context.h	2024-09-09 00:43:55.776444900 +0200
 @@ -0,0 +1,52 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -183,9 +183,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/context.h linux-6.11-rc2p/drivers/hid
 +};
 +
 +#endif /* IPTS_CONTEXT_H */
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/control.c linux-6.11-rc2p/drivers/hid/ipts/control.c
---- linux-6.11-rc2/drivers/hid/ipts/control.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/control.c	2024-08-05 15:14:49.824964552 +0200
+diff -rupN a/drivers/hid/ipts/control.c b/drivers/hid/ipts/control.c
+--- a/drivers/hid/ipts/control.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/control.c	2024-09-09 00:43:55.776444900 +0200
 @@ -0,0 +1,486 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -673,9 +673,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/control.c linux-6.11-rc2p/drivers/hid
 +
 +	return 0;
 +}
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/control.h linux-6.11-rc2p/drivers/hid/ipts/control.h
---- linux-6.11-rc2/drivers/hid/ipts/control.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/control.h	2024-08-05 15:14:49.824964552 +0200
+diff -rupN a/drivers/hid/ipts/control.h b/drivers/hid/ipts/control.h
+--- a/drivers/hid/ipts/control.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/control.h	2024-09-09 00:43:55.777444907 +0200
 @@ -0,0 +1,126 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -803,9 +803,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/control.h linux-6.11-rc2p/drivers/hid
 +int ipts_control_restart(struct ipts_context *ipts);
 +
 +#endif /* IPTS_CONTROL_H */
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/desc.h linux-6.11-rc2p/drivers/hid/ipts/desc.h
---- linux-6.11-rc2/drivers/hid/ipts/desc.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/desc.h	2024-08-05 15:14:49.824964552 +0200
+diff -rupN a/drivers/hid/ipts/desc.h b/drivers/hid/ipts/desc.h
+--- a/drivers/hid/ipts/desc.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/desc.h	2024-09-09 00:43:55.777444907 +0200
 @@ -0,0 +1,80 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -887,9 +887,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/desc.h linux-6.11-rc2p/drivers/hid/ip
 +};
 +
 +#endif /* IPTS_DESC_H */
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/eds1.c linux-6.11-rc2p/drivers/hid/ipts/eds1.c
---- linux-6.11-rc2/drivers/hid/ipts/eds1.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/eds1.c	2024-08-05 15:14:49.824964552 +0200
+diff -rupN a/drivers/hid/ipts/eds1.c b/drivers/hid/ipts/eds1.c
+--- a/drivers/hid/ipts/eds1.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/eds1.c	2024-09-09 00:43:55.777444907 +0200
 @@ -0,0 +1,104 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -995,9 +995,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/eds1.c linux-6.11-rc2p/drivers/hid/ip
 +
 +	return ret;
 +}
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/eds1.h linux-6.11-rc2p/drivers/hid/ipts/eds1.h
---- linux-6.11-rc2/drivers/hid/ipts/eds1.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/eds1.h	2024-08-05 15:14:49.824964552 +0200
+diff -rupN a/drivers/hid/ipts/eds1.h b/drivers/hid/ipts/eds1.h
+--- a/drivers/hid/ipts/eds1.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/eds1.h	2024-09-09 00:43:55.778444914 +0200
 @@ -0,0 +1,35 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -1034,9 +1034,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/eds1.h linux-6.11-rc2p/drivers/hid/ip
 + */
 +int ipts_eds1_raw_request(struct ipts_context *ipts, u8 *buffer, size_t size, u8 report_id,
 +			  enum hid_report_type report_type, enum hid_class_request request_type);
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/eds2.c linux-6.11-rc2p/drivers/hid/ipts/eds2.c
---- linux-6.11-rc2/drivers/hid/ipts/eds2.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/eds2.c	2024-08-05 15:14:49.824964552 +0200
+diff -rupN a/drivers/hid/ipts/eds2.c b/drivers/hid/ipts/eds2.c
+--- a/drivers/hid/ipts/eds2.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/eds2.c	2024-09-09 00:43:55.778444914 +0200
 @@ -0,0 +1,145 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -1183,9 +1183,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/eds2.c linux-6.11-rc2p/drivers/hid/ip
 +	else
 +		return ipts_eds2_set_feature(ipts, buffer, size, report_id, feedback_type);
 +}
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/eds2.h linux-6.11-rc2p/drivers/hid/ipts/eds2.h
---- linux-6.11-rc2/drivers/hid/ipts/eds2.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/eds2.h	2024-08-05 15:14:49.824964552 +0200
+diff -rupN a/drivers/hid/ipts/eds2.h b/drivers/hid/ipts/eds2.h
+--- a/drivers/hid/ipts/eds2.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/eds2.h	2024-09-09 00:43:55.778444914 +0200
 @@ -0,0 +1,35 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -1222,9 +1222,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/eds2.h linux-6.11-rc2p/drivers/hid/ip
 + */
 +int ipts_eds2_raw_request(struct ipts_context *ipts, u8 *buffer, size_t size, u8 report_id,
 +			  enum hid_report_type report_type, enum hid_class_request request_type);
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/hid.c linux-6.11-rc2p/drivers/hid/ipts/hid.c
---- linux-6.11-rc2/drivers/hid/ipts/hid.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/hid.c	2024-08-05 15:14:49.824964552 +0200
+diff -rupN a/drivers/hid/ipts/hid.c b/drivers/hid/ipts/hid.c
+--- a/drivers/hid/ipts/hid.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/hid.c	2024-09-09 00:43:55.779444921 +0200
 @@ -0,0 +1,225 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -1451,9 +1451,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/hid.c linux-6.11-rc2p/drivers/hid/ipt
 +
 +	return 0;
 +}
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/hid.h linux-6.11-rc2p/drivers/hid/ipts/hid.h
---- linux-6.11-rc2/drivers/hid/ipts/hid.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/hid.h	2024-08-05 15:14:49.824964552 +0200
+diff -rupN a/drivers/hid/ipts/hid.h b/drivers/hid/ipts/hid.h
+--- a/drivers/hid/ipts/hid.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/hid.h	2024-09-09 00:43:55.779444921 +0200
 @@ -0,0 +1,24 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -1479,9 +1479,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/hid.h linux-6.11-rc2p/drivers/hid/ipt
 +int ipts_hid_free(struct ipts_context *ipts);
 +
 +#endif /* IPTS_HID_H */
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/Kconfig linux-6.11-rc2p/drivers/hid/ipts/Kconfig
---- linux-6.11-rc2/drivers/hid/ipts/Kconfig	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/Kconfig	2024-08-05 15:14:49.823964553 +0200
+diff -rupN a/drivers/hid/ipts/Kconfig b/drivers/hid/ipts/Kconfig
+--- a/drivers/hid/ipts/Kconfig	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/Kconfig	2024-09-09 00:43:55.779444921 +0200
 @@ -0,0 +1,14 @@
 +# SPDX-License-Identifier: GPL-2.0-or-later
 +
@@ -1497,9 +1497,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/Kconfig linux-6.11-rc2p/drivers/hid/i
 +
 +	  To compile this driver as a module, choose M here: the
 +	  module will be called ipts.
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/main.c linux-6.11-rc2p/drivers/hid/ipts/main.c
---- linux-6.11-rc2/drivers/hid/ipts/main.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/main.c	2024-08-05 15:14:49.824964552 +0200
+diff -rupN a/drivers/hid/ipts/main.c b/drivers/hid/ipts/main.c
+--- a/drivers/hid/ipts/main.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/main.c	2024-09-09 00:43:55.779444921 +0200
 @@ -0,0 +1,126 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -1627,9 +1627,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/main.c linux-6.11-rc2p/drivers/hid/ip
 +MODULE_DESCRIPTION("IPTS touchscreen driver");
 +MODULE_AUTHOR("Dorian Stoll <dorian.stoll@tmsp.io>");
 +MODULE_LICENSE("GPL");
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/Makefile linux-6.11-rc2p/drivers/hid/ipts/Makefile
---- linux-6.11-rc2/drivers/hid/ipts/Makefile	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/Makefile	2024-08-05 15:14:49.823964553 +0200
+diff -rupN a/drivers/hid/ipts/Makefile b/drivers/hid/ipts/Makefile
+--- a/drivers/hid/ipts/Makefile	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/Makefile	2024-09-09 00:43:55.780444928 +0200
 @@ -0,0 +1,16 @@
 +# SPDX-License-Identifier: GPL-2.0-or-later
 +#
@@ -1647,9 +1647,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/Makefile linux-6.11-rc2p/drivers/hid/
 +ipts-objs += receiver.o
 +ipts-objs += resources.o
 +ipts-objs += thread.o
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/mei.c linux-6.11-rc2p/drivers/hid/ipts/mei.c
---- linux-6.11-rc2/drivers/hid/ipts/mei.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/mei.c	2024-08-05 15:14:49.825964551 +0200
+diff -rupN a/drivers/hid/ipts/mei.c b/drivers/hid/ipts/mei.c
+--- a/drivers/hid/ipts/mei.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/mei.c	2024-09-09 00:43:55.780444928 +0200
 @@ -0,0 +1,188 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -1839,9 +1839,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/mei.c linux-6.11-rc2p/drivers/hid/ipt
 +
 +	return 0;
 +}
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/mei.h linux-6.11-rc2p/drivers/hid/ipts/mei.h
---- linux-6.11-rc2/drivers/hid/ipts/mei.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/mei.h	2024-08-05 15:14:49.825964551 +0200
+diff -rupN a/drivers/hid/ipts/mei.h b/drivers/hid/ipts/mei.h
+--- a/drivers/hid/ipts/mei.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/mei.h	2024-09-09 00:43:55.780444928 +0200
 @@ -0,0 +1,66 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -1909,9 +1909,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/mei.h linux-6.11-rc2p/drivers/hid/ipt
 +int ipts_mei_init(struct ipts_mei *mei, struct mei_cl_device *cldev);
 +
 +#endif /* IPTS_MEI_H */
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/receiver.c linux-6.11-rc2p/drivers/hid/ipts/receiver.c
---- linux-6.11-rc2/drivers/hid/ipts/receiver.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/receiver.c	2024-08-05 15:14:49.825964551 +0200
+diff -rupN a/drivers/hid/ipts/receiver.c b/drivers/hid/ipts/receiver.c
+--- a/drivers/hid/ipts/receiver.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/receiver.c	2024-09-09 00:43:55.780444928 +0200
 @@ -0,0 +1,251 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -2164,9 +2164,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/receiver.c linux-6.11-rc2p/drivers/hi
 +
 +	return 0;
 +}
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/receiver.h linux-6.11-rc2p/drivers/hid/ipts/receiver.h
---- linux-6.11-rc2/drivers/hid/ipts/receiver.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/receiver.h	2024-08-05 15:14:49.825964551 +0200
+diff -rupN a/drivers/hid/ipts/receiver.h b/drivers/hid/ipts/receiver.h
+--- a/drivers/hid/ipts/receiver.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/receiver.h	2024-09-09 00:43:55.780444928 +0200
 @@ -0,0 +1,16 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -2184,9 +2184,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/receiver.h linux-6.11-rc2p/drivers/hi
 +int ipts_receiver_stop(struct ipts_context *ipts);
 +
 +#endif /* IPTS_RECEIVER_H */
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/resources.c linux-6.11-rc2p/drivers/hid/ipts/resources.c
---- linux-6.11-rc2/drivers/hid/ipts/resources.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/resources.c	2024-08-05 15:14:49.825964551 +0200
+diff -rupN a/drivers/hid/ipts/resources.c b/drivers/hid/ipts/resources.c
+--- a/drivers/hid/ipts/resources.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/resources.c	2024-09-09 00:43:55.780444928 +0200
 @@ -0,0 +1,131 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -2319,9 +2319,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/resources.c linux-6.11-rc2p/drivers/h
 +
 +	return 0;
 +}
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/resources.h linux-6.11-rc2p/drivers/hid/ipts/resources.h
---- linux-6.11-rc2/drivers/hid/ipts/resources.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/resources.h	2024-08-05 15:14:49.825964551 +0200
+diff -rupN a/drivers/hid/ipts/resources.h b/drivers/hid/ipts/resources.h
+--- a/drivers/hid/ipts/resources.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/resources.h	2024-09-09 00:43:55.780444928 +0200
 @@ -0,0 +1,41 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -2364,9 +2364,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/resources.h linux-6.11-rc2p/drivers/h
 +int ipts_resources_free(struct ipts_resources *res);
 +
 +#endif /* IPTS_RESOURCES_H */
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/spec-data.h linux-6.11-rc2p/drivers/hid/ipts/spec-data.h
---- linux-6.11-rc2/drivers/hid/ipts/spec-data.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/spec-data.h	2024-08-05 15:14:49.825964551 +0200
+diff -rupN a/drivers/hid/ipts/spec-data.h b/drivers/hid/ipts/spec-data.h
+--- a/drivers/hid/ipts/spec-data.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/spec-data.h	2024-09-09 00:43:55.781444935 +0200
 @@ -0,0 +1,100 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -2468,9 +2468,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/spec-data.h linux-6.11-rc2p/drivers/h
 +static_assert(sizeof(struct ipts_data_header) == 64);
 +
 +#endif /* IPTS_SPEC_DATA_H */
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/spec-device.h linux-6.11-rc2p/drivers/hid/ipts/spec-device.h
---- linux-6.11-rc2/drivers/hid/ipts/spec-device.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/spec-device.h	2024-08-05 15:14:49.825964551 +0200
+diff -rupN a/drivers/hid/ipts/spec-device.h b/drivers/hid/ipts/spec-device.h
+--- a/drivers/hid/ipts/spec-device.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/spec-device.h	2024-09-09 00:43:55.781444935 +0200
 @@ -0,0 +1,290 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -2762,9 +2762,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/spec-device.h linux-6.11-rc2p/drivers
 +static_assert(sizeof(struct ipts_device_info) == 44);
 +
 +#endif /* IPTS_SPEC_DEVICE_H */
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/spec-hid.h linux-6.11-rc2p/drivers/hid/ipts/spec-hid.h
---- linux-6.11-rc2/drivers/hid/ipts/spec-hid.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/spec-hid.h	2024-08-05 15:14:49.825964551 +0200
+diff -rupN a/drivers/hid/ipts/spec-hid.h b/drivers/hid/ipts/spec-hid.h
+--- a/drivers/hid/ipts/spec-hid.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/spec-hid.h	2024-09-09 00:43:55.781444935 +0200
 @@ -0,0 +1,34 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -2800,9 +2800,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/spec-hid.h linux-6.11-rc2p/drivers/hi
 +static_assert(sizeof(struct ipts_hid_header) == 7);
 +
 +#endif /* IPTS_SPEC_HID_H */
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/thread.c linux-6.11-rc2p/drivers/hid/ipts/thread.c
---- linux-6.11-rc2/drivers/hid/ipts/thread.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/thread.c	2024-08-05 15:14:49.825964551 +0200
+diff -rupN a/drivers/hid/ipts/thread.c b/drivers/hid/ipts/thread.c
+--- a/drivers/hid/ipts/thread.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/thread.c	2024-09-09 00:43:55.781444935 +0200
 @@ -0,0 +1,84 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
@@ -2888,9 +2888,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/thread.c linux-6.11-rc2p/drivers/hid/
 +
 +	return ret;
 +}
-diff -rupN linux-6.11-rc2/drivers/hid/ipts/thread.h linux-6.11-rc2p/drivers/hid/ipts/thread.h
---- linux-6.11-rc2/drivers/hid/ipts/thread.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ipts/thread.h	2024-08-05 15:14:49.825964551 +0200
+diff -rupN a/drivers/hid/ipts/thread.h b/drivers/hid/ipts/thread.h
+--- a/drivers/hid/ipts/thread.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ipts/thread.h	2024-09-09 00:43:55.781444935 +0200
 @@ -0,0 +1,59 @@
 +/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
@@ -2951,9 +2951,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ipts/thread.h linux-6.11-rc2p/drivers/hid/
 +int ipts_thread_stop(struct ipts_thread *thread);
 +
 +#endif /* IPTS_THREAD_H */
-diff -rupN linux-6.11-rc2/drivers/hid/Kconfig linux-6.11-rc2p/drivers/hid/Kconfig
---- linux-6.11-rc2/drivers/hid/Kconfig	2024-08-04 22:50:53.000000000 +0200
-+++ linux-6.11-rc2p/drivers/hid/Kconfig	2024-08-05 15:14:49.823964553 +0200
+diff -rupN a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+--- a/drivers/hid/Kconfig	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/hid/Kconfig	2024-09-09 00:43:55.781444935 +0200
 @@ -1367,4 +1367,6 @@ source "drivers/hid/amd-sfh-hid/Kconfig"
  
  source "drivers/hid/surface-hid/Kconfig"
@@ -2961,18 +2961,18 @@ diff -rupN linux-6.11-rc2/drivers/hid/Kconfig linux-6.11-rc2p/drivers/hid/Kconfi
 +source "drivers/hid/ipts/Kconfig"
 +
  endif # HID_SUPPORT
-diff -rupN linux-6.11-rc2/drivers/hid/Makefile linux-6.11-rc2p/drivers/hid/Makefile
---- linux-6.11-rc2/drivers/hid/Makefile	2024-08-04 22:50:53.000000000 +0200
-+++ linux-6.11-rc2p/drivers/hid/Makefile	2024-08-05 15:14:49.823964553 +0200
+diff -rupN a/drivers/hid/Makefile b/drivers/hid/Makefile
+--- a/drivers/hid/Makefile	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/hid/Makefile	2024-09-09 00:43:55.781444935 +0200
 @@ -169,3 +169,5 @@ obj-$(INTEL_ISH_FIRMWARE_DOWNLOADER)	+=
  obj-$(CONFIG_AMD_SFH_HID)       += amd-sfh-hid/
  
  obj-$(CONFIG_SURFACE_HID_CORE)  += surface-hid/
 +
 +obj-$(CONFIG_HID_IPTS)          += ipts/
-diff -rupN linux-6.11-rc2/drivers/iommu/intel/iommu.c linux-6.11-rc2p/drivers/iommu/intel/iommu.c
---- linux-6.11-rc2/drivers/iommu/intel/iommu.c	2024-08-04 22:50:53.000000000 +0200
-+++ linux-6.11-rc2p/drivers/iommu/intel/iommu.c	2024-08-05 15:14:49.823964553 +0200
+diff -rupN a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+--- a/drivers/iommu/intel/iommu.c	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/iommu/intel/iommu.c	2024-09-09 00:43:55.782444941 +0200
 @@ -40,6 +40,11 @@
  #define IS_ISA_DEVICE(pdev) ((pdev->class >> 8) == PCI_CLASS_BRIDGE_ISA)
  #define IS_AZALIA(pdev) ((pdev)->vendor == 0x8086 && (pdev)->device == 0x3a3e)
@@ -3000,7 +3000,7 @@ diff -rupN linux-6.11-rc2/drivers/iommu/intel/iommu.c linux-6.11-rc2p/drivers/io
  
  const struct iommu_ops intel_iommu_ops;
  static const struct iommu_dirty_ops intel_dirty_ops;
-@@ -2154,6 +2161,9 @@ static int device_def_domain_type(struct
+@@ -2156,6 +2163,9 @@ static int device_def_domain_type(struct
  
  		if ((iommu_identity_mapping & IDENTMAP_AZALIA) && IS_AZALIA(pdev))
  			return IOMMU_DOMAIN_IDENTITY;
@@ -3010,7 +3010,7 @@ diff -rupN linux-6.11-rc2/drivers/iommu/intel/iommu.c linux-6.11-rc2p/drivers/io
  	}
  
  	return 0;
-@@ -2454,6 +2464,9 @@ static int __init init_dmars(void)
+@@ -2456,6 +2466,9 @@ static int __init init_dmars(void)
  		iommu_set_root_entry(iommu);
  	}
  
@@ -3020,7 +3020,7 @@ diff -rupN linux-6.11-rc2/drivers/iommu/intel/iommu.c linux-6.11-rc2p/drivers/io
  	check_tylersburg_isoch();
  
  	ret = si_domain_init(hw_pass_through);
-@@ -4695,6 +4708,18 @@ static void quirk_iommu_igfx(struct pci_
+@@ -4699,6 +4712,18 @@ static void quirk_iommu_igfx(struct pci_
  	disable_igfx_iommu = 1;
  }
  
@@ -3039,7 +3039,7 @@ diff -rupN linux-6.11-rc2/drivers/iommu/intel/iommu.c linux-6.11-rc2p/drivers/io
  /* G4x/GM45 integrated gfx dmar support is totally busted. */
  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x2a40, quirk_iommu_igfx);
  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x2e00, quirk_iommu_igfx);
-@@ -4730,6 +4755,10 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_I
+@@ -4734,6 +4759,10 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_I
  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x163A, quirk_iommu_igfx);
  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x163D, quirk_iommu_igfx);
  
@@ -3050,9 +3050,9 @@ diff -rupN linux-6.11-rc2/drivers/iommu/intel/iommu.c linux-6.11-rc2p/drivers/io
  static void quirk_iommu_rwbf(struct pci_dev *dev)
  {
  	if (risky_device(dev))
-diff -rupN linux-6.11-rc2/drivers/misc/mei/hw-me-regs.h linux-6.11-rc2p/drivers/misc/mei/hw-me-regs.h
---- linux-6.11-rc2/drivers/misc/mei/hw-me-regs.h	2024-08-04 22:50:53.000000000 +0200
-+++ linux-6.11-rc2p/drivers/misc/mei/hw-me-regs.h	2024-08-05 15:14:49.822964553 +0200
+diff -rupN a/drivers/misc/mei/hw-me-regs.h b/drivers/misc/mei/hw-me-regs.h
+--- a/drivers/misc/mei/hw-me-regs.h	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/misc/mei/hw-me-regs.h	2024-09-09 00:43:55.782444941 +0200
 @@ -92,6 +92,7 @@
  #define MEI_DEV_ID_CDF        0x18D3  /* Cedar Fork */
  
@@ -3061,9 +3061,9 @@ diff -rupN linux-6.11-rc2/drivers/misc/mei/hw-me-regs.h linux-6.11-rc2p/drivers/
  #define MEI_DEV_ID_ICP_N      0x38E0  /* Ice Lake Point N */
  
  #define MEI_DEV_ID_JSP_N      0x4DE0  /* Jasper Lake Point N */
-diff -rupN linux-6.11-rc2/drivers/misc/mei/pci-me.c linux-6.11-rc2p/drivers/misc/mei/pci-me.c
---- linux-6.11-rc2/drivers/misc/mei/pci-me.c	2024-08-04 22:50:53.000000000 +0200
-+++ linux-6.11-rc2p/drivers/misc/mei/pci-me.c	2024-08-05 15:14:49.822964553 +0200
+diff -rupN a/drivers/misc/mei/pci-me.c b/drivers/misc/mei/pci-me.c
+--- a/drivers/misc/mei/pci-me.c	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/misc/mei/pci-me.c	2024-09-09 00:43:55.782444941 +0200
 @@ -97,6 +97,7 @@ static const struct pci_device_id mei_me
  	{MEI_PCI_DEVICE(MEI_DEV_ID_CMP_H_3, MEI_ME_PCH8_ITOUCH_CFG)},
  

@@ -1,5 +1,8 @@
 Patches for 6.11-rcX
 
+2024-09-09
+- rc7 offset fixes
+
 2024-09-01
 - ok with rc6
 
