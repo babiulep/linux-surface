@@ -1,6 +1,6 @@
 diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
---- a/drivers/hid/hid-multitouch.c	2024-08-22 00:34:27.000000000 +0200
-+++ b/drivers/hid/hid-multitouch.c	2024-08-22 15:07:52.755721511 +0200
+--- a/drivers/hid/hid-multitouch.c	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/hid/hid-multitouch.c	2024-09-15 12:20:23.776754605 +0200
 @@ -34,7 +34,10 @@
  #include <linux/device.h>
  #include <linux/hid.h>
@@ -364,8 +364,8 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	{ .driver_data = MT_CLS_GOOGLE,
  		HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY, USB_VENDOR_ID_GOOGLE,
 diff -rupN a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
---- a/drivers/usb/core/quirks.c	2024-08-22 00:34:27.000000000 +0200
-+++ b/drivers/usb/core/quirks.c	2024-08-22 15:07:52.754721505 +0200
+--- a/drivers/usb/core/quirks.c	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/usb/core/quirks.c	2024-09-15 12:20:23.773754581 +0200
 @@ -223,6 +223,9 @@ static const struct usb_device_id usb_qu
  	/* Microsoft Surface Dock Ethernet (RTL8153 GigE) */
  	{ USB_DEVICE(0x045e, 0x07c6), .driver_info = USB_QUIRK_NO_LPM },

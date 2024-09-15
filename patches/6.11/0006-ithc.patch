@@ -1,6 +1,6 @@
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-debug.c linux-6.11-rc2p/drivers/hid/ithc/ithc-debug.c
---- linux-6.11-rc2/drivers/hid/ithc/ithc-debug.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-debug.c	2024-08-05 15:21:56.350640648 +0200
+diff -rupN a/drivers/hid/ithc/ithc-debug.c b/drivers/hid/ithc/ithc-debug.c
+--- a/drivers/hid/ithc/ithc-debug.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-debug.c	2024-09-15 11:58:41.016272397 +0200
 @@ -0,0 +1,149 @@
 +// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
 +
@@ -151,9 +151,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-debug.c linux-6.11-rc2p/drivers/
 +	return 0;
 +}
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-debug.h linux-6.11-rc2p/drivers/hid/ithc/ithc-debug.h
---- linux-6.11-rc2/drivers/hid/ithc/ithc-debug.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-debug.h	2024-08-05 15:21:56.350640648 +0200
+diff -rupN a/drivers/hid/ithc/ithc-debug.h b/drivers/hid/ithc/ithc-debug.h
+--- a/drivers/hid/ithc/ithc-debug.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-debug.h	2024-09-15 11:58:41.016272397 +0200
 @@ -0,0 +1,7 @@
 +/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
 +
@@ -162,9 +162,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-debug.h linux-6.11-rc2p/drivers/
 +int ithc_debug_init_device(struct ithc *ithc);
 +void ithc_log_regs(struct ithc *ithc);
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-dma.c linux-6.11-rc2p/drivers/hid/ithc/ithc-dma.c
---- linux-6.11-rc2/drivers/hid/ithc/ithc-dma.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-dma.c	2024-08-05 15:21:56.350640648 +0200
+diff -rupN a/drivers/hid/ithc/ithc-dma.c b/drivers/hid/ithc/ithc-dma.c
+--- a/drivers/hid/ithc/ithc-dma.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-dma.c	2024-09-15 11:58:41.016272397 +0200
 @@ -0,0 +1,312 @@
 +// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
 +
@@ -478,9 +478,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-dma.c linux-6.11-rc2p/drivers/hi
 +	return ret;
 +}
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-dma.h linux-6.11-rc2p/drivers/hid/ithc/ithc-dma.h
---- linux-6.11-rc2/drivers/hid/ithc/ithc-dma.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-dma.h	2024-08-05 15:21:56.350640648 +0200
+diff -rupN a/drivers/hid/ithc/ithc-dma.h b/drivers/hid/ithc/ithc-dma.h
+--- a/drivers/hid/ithc/ithc-dma.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-dma.h	2024-09-15 11:58:41.016272397 +0200
 @@ -0,0 +1,47 @@
 +/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
 +
@@ -529,9 +529,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-dma.h linux-6.11-rc2p/drivers/hi
 +int ithc_dma_rx(struct ithc *ithc, u8 channel);
 +int ithc_dma_tx(struct ithc *ithc, const struct ithc_data *data);
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc.h linux-6.11-rc2p/drivers/hid/ithc/ithc.h
---- linux-6.11-rc2/drivers/hid/ithc/ithc.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc.h	2024-08-05 15:21:56.351640651 +0200
+diff -rupN a/drivers/hid/ithc/ithc.h b/drivers/hid/ithc/ithc.h
+--- a/drivers/hid/ithc/ithc.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc.h	2024-09-15 11:58:41.017272406 +0200
 @@ -0,0 +1,89 @@
 +/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
 +
@@ -622,9 +622,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc.h linux-6.11-rc2p/drivers/hid/it
 +
 +int ithc_reset(struct ithc *ithc);
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-hid.c linux-6.11-rc2p/drivers/hid/ithc/ithc-hid.c
---- linux-6.11-rc2/drivers/hid/ithc/ithc-hid.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-hid.c	2024-08-05 15:21:56.350640648 +0200
+diff -rupN a/drivers/hid/ithc/ithc-hid.c b/drivers/hid/ithc/ithc-hid.c
+--- a/drivers/hid/ithc/ithc-hid.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-hid.c	2024-09-15 11:58:41.017272406 +0200
 @@ -0,0 +1,207 @@
 +// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
 +
@@ -833,9 +833,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-hid.c linux-6.11-rc2p/drivers/hi
 +	return 0;
 +}
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-hid.h linux-6.11-rc2p/drivers/hid/ithc/ithc-hid.h
---- linux-6.11-rc2/drivers/hid/ithc/ithc-hid.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-hid.h	2024-08-05 15:21:56.350640648 +0200
+diff -rupN a/drivers/hid/ithc/ithc-hid.h b/drivers/hid/ithc/ithc-hid.h
+--- a/drivers/hid/ithc/ithc-hid.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-hid.h	2024-09-15 11:58:41.017272406 +0200
 @@ -0,0 +1,32 @@
 +/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
 +
@@ -869,9 +869,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-hid.h linux-6.11-rc2p/drivers/hi
 +int ithc_hid_init(struct ithc *ithc);
 +void ithc_hid_process_data(struct ithc *ithc, struct ithc_data *d);
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-legacy.c linux-6.11-rc2p/drivers/hid/ithc/ithc-legacy.c
---- linux-6.11-rc2/drivers/hid/ithc/ithc-legacy.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-legacy.c	2024-08-05 15:21:56.350640648 +0200
+diff -rupN a/drivers/hid/ithc/ithc-legacy.c b/drivers/hid/ithc/ithc-legacy.c
+--- a/drivers/hid/ithc/ithc-legacy.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-legacy.c	2024-09-15 11:58:41.017272406 +0200
 @@ -0,0 +1,254 @@
 +// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
 +
@@ -1127,9 +1127,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-legacy.c linux-6.11-rc2p/drivers
 +	return sizeof(*hdr) + padded;
 +}
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-legacy.h linux-6.11-rc2p/drivers/hid/ithc/ithc-legacy.h
---- linux-6.11-rc2/drivers/hid/ithc/ithc-legacy.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-legacy.h	2024-08-05 15:21:56.350640648 +0200
+diff -rupN a/drivers/hid/ithc/ithc-legacy.h b/drivers/hid/ithc/ithc-legacy.h
+--- a/drivers/hid/ithc/ithc-legacy.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-legacy.h	2024-09-15 11:58:41.017272406 +0200
 @@ -0,0 +1,8 @@
 +/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
 +
@@ -1139,9 +1139,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-legacy.h linux-6.11-rc2p/drivers
 +ssize_t ithc_legacy_encode_tx(struct ithc *ithc, const struct ithc_data *src, void *dest,
 +	size_t maxlen);
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-main.c linux-6.11-rc2p/drivers/hid/ithc/ithc-main.c
---- linux-6.11-rc2/drivers/hid/ithc/ithc-main.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-main.c	2024-08-05 15:21:56.351640651 +0200
+diff -rupN a/drivers/hid/ithc/ithc-main.c b/drivers/hid/ithc/ithc-main.c
+--- a/drivers/hid/ithc/ithc-main.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-main.c	2024-09-15 11:58:41.017272406 +0200
 @@ -0,0 +1,431 @@
 +// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
 +
@@ -1574,9 +1574,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-main.c linux-6.11-rc2p/drivers/h
 +module_init(ithc_init);
 +module_exit(ithc_exit);
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-quickspi.c linux-6.11-rc2p/drivers/hid/ithc/ithc-quickspi.c
---- linux-6.11-rc2/drivers/hid/ithc/ithc-quickspi.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-quickspi.c	2024-08-05 15:21:56.351640651 +0200
+diff -rupN a/drivers/hid/ithc/ithc-quickspi.c b/drivers/hid/ithc/ithc-quickspi.c
+--- a/drivers/hid/ithc/ithc-quickspi.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-quickspi.c	2024-09-15 11:58:41.017272406 +0200
 @@ -0,0 +1,607 @@
 +// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
 +
@@ -2185,9 +2185,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-quickspi.c linux-6.11-rc2p/drive
 +	return sizeof(*hdr) + padded;
 +}
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-quickspi.h linux-6.11-rc2p/drivers/hid/ithc/ithc-quickspi.h
---- linux-6.11-rc2/drivers/hid/ithc/ithc-quickspi.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-quickspi.h	2024-08-05 15:21:56.351640651 +0200
+diff -rupN a/drivers/hid/ithc/ithc-quickspi.h b/drivers/hid/ithc/ithc-quickspi.h
+--- a/drivers/hid/ithc/ithc-quickspi.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-quickspi.h	2024-09-15 11:58:41.017272406 +0200
 @@ -0,0 +1,39 @@
 +/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
 +
@@ -2228,9 +2228,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-quickspi.h linux-6.11-rc2p/drive
 +ssize_t ithc_quickspi_encode_tx(struct ithc *ithc, const struct ithc_data *src, void *dest,
 +	size_t maxlen);
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-regs.c linux-6.11-rc2p/drivers/hid/ithc/ithc-regs.c
---- linux-6.11-rc2/drivers/hid/ithc/ithc-regs.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-regs.c	2024-08-05 15:21:56.351640651 +0200
+diff -rupN a/drivers/hid/ithc/ithc-regs.c b/drivers/hid/ithc/ithc-regs.c
+--- a/drivers/hid/ithc/ithc-regs.c	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-regs.c	2024-09-15 11:58:41.017272406 +0200
 @@ -0,0 +1,154 @@
 +// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
 +
@@ -2386,9 +2386,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-regs.c linux-6.11-rc2p/drivers/h
 +	return 0;
 +}
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-regs.h linux-6.11-rc2p/drivers/hid/ithc/ithc-regs.h
---- linux-6.11-rc2/drivers/hid/ithc/ithc-regs.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/ithc-regs.h	2024-08-05 15:21:56.351640651 +0200
+diff -rupN a/drivers/hid/ithc/ithc-regs.h b/drivers/hid/ithc/ithc-regs.h
+--- a/drivers/hid/ithc/ithc-regs.h	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/ithc-regs.h	2024-09-15 11:58:41.017272406 +0200
 @@ -0,0 +1,211 @@
 +/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
 +
@@ -2601,9 +2601,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/ithc-regs.h linux-6.11-rc2p/drivers/h
 +int ithc_set_spi_config(struct ithc *ithc, u8 clkdiv, bool clkdiv8, u8 read_mode, u8 write_mode);
 +int ithc_spi_command(struct ithc *ithc, u8 command, u32 offset, u32 size, void *data);
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/Kbuild linux-6.11-rc2p/drivers/hid/ithc/Kbuild
---- linux-6.11-rc2/drivers/hid/ithc/Kbuild	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/Kbuild	2024-08-05 15:21:56.350640648 +0200
+diff -rupN a/drivers/hid/ithc/Kbuild b/drivers/hid/ithc/Kbuild
+--- a/drivers/hid/ithc/Kbuild	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/Kbuild	2024-09-15 11:58:41.016272397 +0200
 @@ -0,0 +1,6 @@
 +obj-$(CONFIG_HID_ITHC) := ithc.o
 +
@@ -2611,9 +2611,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/Kbuild linux-6.11-rc2p/drivers/hid/it
 +
 +ccflags-y := -std=gnu11 -Wno-declaration-after-statement
 +
-diff -rupN linux-6.11-rc2/drivers/hid/ithc/Kconfig linux-6.11-rc2p/drivers/hid/ithc/Kconfig
---- linux-6.11-rc2/drivers/hid/ithc/Kconfig	1970-01-01 01:00:00.000000000 +0100
-+++ linux-6.11-rc2p/drivers/hid/ithc/Kconfig	2024-08-05 15:21:56.350640648 +0200
+diff -rupN a/drivers/hid/ithc/Kconfig b/drivers/hid/ithc/Kconfig
+--- a/drivers/hid/ithc/Kconfig	1970-01-01 01:00:00.000000000 +0100
++++ b/drivers/hid/ithc/Kconfig	2024-09-15 11:58:41.016272397 +0200
 @@ -0,0 +1,12 @@
 +config HID_ITHC
 +	tristate "Intel Touch Host Controller"
@@ -2627,9 +2627,9 @@ diff -rupN linux-6.11-rc2/drivers/hid/ithc/Kconfig linux-6.11-rc2p/drivers/hid/i
 +
 +	  To compile this driver as a module, choose M here: the
 +	  module will be called ithc.
-diff -rupN linux-6.11-rc2/drivers/hid/Kconfig linux-6.11-rc2p/drivers/hid/Kconfig
---- linux-6.11-rc2/drivers/hid/Kconfig	2024-08-05 15:23:35.951996449 +0200
-+++ linux-6.11-rc2p/drivers/hid/Kconfig	2024-08-05 15:21:56.349640644 +0200
+diff -rupN a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+--- a/drivers/hid/Kconfig	2024-09-15 11:58:28.890170663 +0200
++++ b/drivers/hid/Kconfig	2024-09-15 11:58:41.015272389 +0200
 @@ -1369,4 +1369,6 @@ source "drivers/hid/surface-hid/Kconfig"
  
  source "drivers/hid/ipts/Kconfig"
@@ -2637,17 +2637,17 @@ diff -rupN linux-6.11-rc2/drivers/hid/Kconfig linux-6.11-rc2p/drivers/hid/Kconfi
 +source "drivers/hid/ithc/Kconfig"
 +
  endif # HID_SUPPORT
-diff -rupN linux-6.11-rc2/drivers/hid/Makefile linux-6.11-rc2p/drivers/hid/Makefile
---- linux-6.11-rc2/drivers/hid/Makefile	2024-08-05 15:23:35.951996449 +0200
-+++ linux-6.11-rc2p/drivers/hid/Makefile	2024-08-05 15:21:56.349640644 +0200
+diff -rupN a/drivers/hid/Makefile b/drivers/hid/Makefile
+--- a/drivers/hid/Makefile	2024-09-15 11:58:28.891170672 +0200
++++ b/drivers/hid/Makefile	2024-09-15 11:58:41.016272397 +0200
 @@ -171,3 +171,4 @@ obj-$(CONFIG_AMD_SFH_HID)       += amd-s
  obj-$(CONFIG_SURFACE_HID_CORE)  += surface-hid/
  
  obj-$(CONFIG_HID_IPTS)          += ipts/
 +obj-$(CONFIG_HID_ITHC)          += ithc/
-diff -rupN linux-6.11-rc2/drivers/iommu/intel/irq_remapping.c linux-6.11-rc2p/drivers/iommu/intel/irq_remapping.c
---- linux-6.11-rc2/drivers/iommu/intel/irq_remapping.c	2024-08-04 22:50:53.000000000 +0200
-+++ linux-6.11-rc2p/drivers/iommu/intel/irq_remapping.c	2024-08-05 15:21:56.348640641 +0200
+diff -rupN a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
+--- a/drivers/iommu/intel/irq_remapping.c	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/iommu/intel/irq_remapping.c	2024-09-15 11:58:41.014272380 +0200
 @@ -390,6 +390,22 @@ static int set_msi_sid(struct irte *irte
  	pci_for_each_dma_alias(dev, set_msi_sid_cb, &data);
  

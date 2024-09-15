@@ -1,6 +1,6 @@
-diff -rupN linux-6.11-rc2/arch/x86/kernel/acpi/boot.c linux-6.11-rc2p/arch/x86/kernel/acpi/boot.c
---- linux-6.11-rc2/arch/x86/kernel/acpi/boot.c	2024-08-04 22:50:53.000000000 +0200
-+++ linux-6.11-rc2p/arch/x86/kernel/acpi/boot.c	2024-08-05 15:37:02.899093612 +0200
+diff -rupN a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+--- a/arch/x86/kernel/acpi/boot.c	2024-09-08 23:50:28.000000000 +0200
++++ b/arch/x86/kernel/acpi/boot.c	2024-09-15 12:32:47.189185039 +0200
 @@ -22,6 +22,7 @@
  #include <linux/efi-bgrt.h>
  #include <linux/serial_core.h>

@@ -1,6 +1,6 @@
-diff -rupN linux-6.11-rc2/drivers/acpi/acpi_tad.c linux-6.11-rc2p/drivers/acpi/acpi_tad.c
---- linux-6.11-rc2/drivers/acpi/acpi_tad.c	2024-08-04 22:50:53.000000000 +0200
-+++ linux-6.11-rc2p/drivers/acpi/acpi_tad.c	2024-08-05 15:38:09.081480917 +0200
+diff -rupN a/drivers/acpi/acpi_tad.c b/drivers/acpi/acpi_tad.c
+--- a/drivers/acpi/acpi_tad.c	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/acpi/acpi_tad.c	2024-09-15 12:33:32.679564709 +0200
 @@ -433,6 +433,14 @@ static ssize_t caps_show(struct device *
  
  static DEVICE_ATTR_RO(caps);

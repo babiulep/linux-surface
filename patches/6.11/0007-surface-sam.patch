@@ -1,6 +1,6 @@
 diff -rupN a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
---- a/drivers/hwmon/Kconfig	2024-08-22 00:34:27.000000000 +0200
-+++ b/drivers/hwmon/Kconfig	2024-08-22 14:48:50.347127566 +0200
+--- a/drivers/hwmon/Kconfig	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/hwmon/Kconfig	2024-09-15 11:59:37.483744189 +0200
 @@ -2080,6 +2080,16 @@ config SENSORS_SURFACE_FAN
  
  	  Select M or Y here, if you want to be able to read the fan's speed.
@@ -19,8 +19,8 @@ diff -rupN a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
  	tristate "Texas Instruments ADC128D818"
  	depends on I2C
 diff -rupN a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
---- a/drivers/hwmon/Makefile	2024-08-22 00:34:27.000000000 +0200
-+++ b/drivers/hwmon/Makefile	2024-08-22 14:48:50.347127566 +0200
+--- a/drivers/hwmon/Makefile	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/hwmon/Makefile	2024-09-15 11:59:37.484744197 +0200
 @@ -209,6 +209,7 @@ obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-t
  obj-$(CONFIG_SENSORS_SPD5118)	+= spd5118.o
  obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
@@ -31,7 +31,7 @@ diff -rupN a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
  obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
 diff -rupN a/drivers/hwmon/surface_temp.c b/drivers/hwmon/surface_temp.c
 --- a/drivers/hwmon/surface_temp.c	1970-01-01 01:00:00.000000000 +0100
-+++ b/drivers/hwmon/surface_temp.c	2024-08-22 14:48:50.347127566 +0200
++++ b/drivers/hwmon/surface_temp.c	2024-09-15 11:59:37.485744206 +0200
 @@ -0,0 +1,244 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
@@ -278,8 +278,8 @@ diff -rupN a/drivers/hwmon/surface_temp.c b/drivers/hwmon/surface_temp.c
 +MODULE_DESCRIPTION("Thermal sensor subsystem driver for Surface System Aggregator Module");
 +MODULE_LICENSE("GPL");
 diff -rupN a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
---- a/drivers/platform/surface/surface_aggregator_registry.c	2024-08-22 00:34:27.000000000 +0200
-+++ b/drivers/platform/surface/surface_aggregator_registry.c	2024-08-22 15:05:10.944713026 +0200
+--- a/drivers/platform/surface/surface_aggregator_registry.c	2024-09-08 23:50:28.000000000 +0200
++++ b/drivers/platform/surface/surface_aggregator_registry.c	2024-09-15 12:16:54.280098308 +0200
 @@ -253,7 +253,9 @@ static const struct software_node *ssam_
  	&ssam_node_root,
  	&ssam_node_bat_ac,
