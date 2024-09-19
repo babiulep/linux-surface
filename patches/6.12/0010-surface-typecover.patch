@@ -1,6 +1,6 @@
 diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
---- a/drivers/hid/hid-multitouch.c	2024-09-19 09:49:10.000000000 +0200
-+++ b/drivers/hid/hid-multitouch.c	2024-09-19 11:28:05.311711180 +0200
+--- a/drivers/hid/hid-multitouch.c	2024-09-19 11:35:31.000000000 +0200
++++ b/drivers/hid/hid-multitouch.c	2024-09-19 13:52:30.459622435 +0200
 @@ -34,7 +34,10 @@
  #include <linux/device.h>
  #include <linux/hid.h>
@@ -270,23 +270,31 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	INIT_LIST_HEAD(&td->applications);
  	INIT_LIST_HEAD(&td->reports);
  
-@@ -1813,6 +1965,7 @@ static int mt_probe(struct hid_device *h
+@@ -1812,8 +1964,10 @@ static int mt_probe(struct hid_device *h
+ 	timer_setup(&td->release_timer, mt_expired_timeout, 0);
  
  	ret = hid_parse(hdev);
- 	if (ret != 0)
+-	if (ret != 0)
++	if (ret != 0) {
 +		unregister_pm_notifier(&td->pm_notifier);
  		return ret;
++	}
  
  	if (mtclass->quirks & MT_QUIRK_FIX_CONST_CONTACT_ID)
-@@ -1823,6 +1976,7 @@ static int mt_probe(struct hid_device *h
+ 		mt_fix_const_fields(hdev, HID_DG_CONTACTID);
+@@ -1822,8 +1976,10 @@ static int mt_probe(struct hid_device *h
+ 		hdev->quirks |= HID_QUIRK_NOGET;
  
  	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
- 	if (ret)
+-	if (ret)
++	if (ret) {
 +		unregister_pm_notifier(&td->pm_notifier);
  		return ret;
++	}
  
  	ret = sysfs_create_group(&hdev->dev.kobj, &mt_attribute_group);
-@@ -1851,13 +2005,24 @@ static int mt_suspend(struct hid_device
+ 	if (ret)
+@@ -1851,13 +2007,24 @@ static int mt_suspend(struct hid_device
  
  static int mt_reset_resume(struct hid_device *hdev)
  {
@@ -311,7 +319,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	/* Some Elan legacy devices require SET_IDLE to be set on resume.
  	 * It should be safe to send it to other devices too.
  	 * Tested on 3M, Stantum, Cypress, Zytronic, eGalax, and Elan panels. */
-@@ -1866,13 +2031,33 @@ static int mt_resume(struct hid_device *
+@@ -1866,13 +2033,33 @@ static int mt_resume(struct hid_device *
  
  	mt_set_modes(hdev, HID_LATENCY_NORMAL, true, true);
  
@@ -345,7 +353,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	del_timer_sync(&td->release_timer);
  
  	sysfs_remove_group(&hdev->dev.kobj, &mt_attribute_group);
-@@ -2286,6 +2471,11 @@ static const struct hid_device_id mt_dev
+@@ -2286,6 +2473,11 @@ static const struct hid_device_id mt_dev
  		MT_USB_DEVICE(USB_VENDOR_ID_XIROKU,
  			USB_DEVICE_ID_XIROKU_CSR2) },
  
@@ -358,8 +366,8 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	{ .driver_data = MT_CLS_GOOGLE,
  		HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY, USB_VENDOR_ID_GOOGLE,
 diff -rupN a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
---- a/drivers/usb/core/quirks.c	2024-09-19 09:49:10.000000000 +0200
-+++ b/drivers/usb/core/quirks.c	2024-09-19 11:23:41.236338301 +0200
+--- a/drivers/usb/core/quirks.c	2024-09-19 11:35:31.000000000 +0200
++++ b/drivers/usb/core/quirks.c	2024-09-19 13:50:47.574824348 +0200
 @@ -223,6 +223,9 @@ static const struct usb_device_id usb_qu
  	/* Microsoft Surface Dock Ethernet (RTL8153 GigE) */
  	{ USB_DEVICE(0x045e, 0x07c6), .driver_info = USB_QUIRK_NO_LPM },
