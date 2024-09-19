@@ -1,6 +1,6 @@
 diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
---- a/drivers/hid/hid-multitouch.c	2024-09-08 23:50:28.000000000 +0200
-+++ b/drivers/hid/hid-multitouch.c	2024-09-15 12:20:23.776754605 +0200
+--- a/drivers/hid/hid-multitouch.c	2024-09-19 09:49:10.000000000 +0200
++++ b/drivers/hid/hid-multitouch.c	2024-09-19 11:28:05.311711180 +0200
 @@ -34,7 +34,10 @@
  #include <linux/device.h>
  #include <linux/hid.h>
@@ -53,12 +53,12 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  #define MT_CLS_RAZER_BLADE_STEALTH		0x0112
  #define MT_CLS_SMART_TECH			0x0113
 +#define MT_CLS_WIN_8_MS_SURFACE_TYPE_COVER	0x0114
+ #define MT_CLS_SIS				0x0457
  
  #define MT_DEFAULT_MAXCONTACT	10
- #define MT_MAX_MAXCONTACT	250
-@@ -396,6 +409,17 @@ static const struct mt_class mt_classes[
- 			MT_QUIRK_CONTACT_CNT_ACCURATE |
- 			MT_QUIRK_SEPARATE_APP_REPORT,
+@@ -402,6 +415,17 @@ static const struct mt_class mt_classes[
+ 			MT_QUIRK_ALWAYS_VALID |
+ 			MT_QUIRK_CONTACT_CNT_ACCURATE,
  	},
 +	{ .name = MT_CLS_WIN_8_MS_SURFACE_TYPE_COVER,
 +		.quirks = MT_QUIRK_HAS_TYPE_COVER_BACKLIGHT |
@@ -74,7 +74,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	{ }
  };
  
-@@ -1369,6 +1393,9 @@ static int mt_input_mapping(struct hid_d
+@@ -1375,6 +1399,9 @@ static int mt_input_mapping(struct hid_d
  	    field->application != HID_CP_CONSUMER_CONTROL &&
  	    field->application != HID_GD_WIRELESS_RADIO_CTLS &&
  	    field->application != HID_GD_SYSTEM_MULTIAXIS &&
@@ -84,7 +84,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	    !(field->application == HID_VD_ASUS_CUSTOM_MEDIA_KEYS &&
  	      application->quirks & MT_QUIRK_ASUS_CUSTOM_UP))
  		return -1;
-@@ -1396,6 +1423,21 @@ static int mt_input_mapping(struct hid_d
+@@ -1402,6 +1429,21 @@ static int mt_input_mapping(struct hid_d
  		return 1;
  	}
  
@@ -106,7 +106,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	if (rdata->is_mt_collection)
  		return mt_touch_input_mapping(hdev, hi, field, usage, bit, max,
  					      application);
-@@ -1417,6 +1459,7 @@ static int mt_input_mapped(struct hid_de
+@@ -1423,6 +1465,7 @@ static int mt_input_mapped(struct hid_de
  {
  	struct mt_device *td = hid_get_drvdata(hdev);
  	struct mt_report_data *rdata;
@@ -114,7 +114,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  
  	rdata = mt_find_report_data(td, field->report);
  	if (rdata && rdata->is_mt_collection) {
-@@ -1424,6 +1467,19 @@ static int mt_input_mapped(struct hid_de
+@@ -1430,6 +1473,19 @@ static int mt_input_mapped(struct hid_de
  		return -1;
  	}
  
@@ -134,7 +134,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	/* let hid-core decide for the others */
  	return 0;
  }
-@@ -1433,11 +1489,21 @@ static int mt_event(struct hid_device *h
+@@ -1439,11 +1495,21 @@ static int mt_event(struct hid_device *h
  {
  	struct mt_device *td = hid_get_drvdata(hid);
  	struct mt_report_data *rdata;
@@ -156,7 +156,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	return 0;
  }
  
-@@ -1614,6 +1680,42 @@ static void mt_post_parse(struct mt_devi
+@@ -1621,6 +1687,42 @@ static void mt_post_parse(struct mt_devi
  		app->quirks &= ~MT_QUIRK_CONTACT_CNT_ACCURATE;
  }
  
@@ -199,7 +199,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  static int mt_input_configured(struct hid_device *hdev, struct hid_input *hi)
  {
  	struct mt_device *td = hid_get_drvdata(hdev);
-@@ -1662,6 +1764,13 @@ static int mt_input_configured(struct hi
+@@ -1669,6 +1771,13 @@ static int mt_input_configured(struct hi
  		/* force BTN_STYLUS to allow tablet matching in udev */
  		__set_bit(BTN_STYLUS, hi->input->keybit);
  		break;
@@ -213,7 +213,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	default:
  		suffix = "UNKNOWN";
  		break;
-@@ -1744,6 +1853,46 @@ static void mt_expired_timeout(struct ti
+@@ -1751,6 +1860,46 @@ static void mt_expired_timeout(struct ti
  	clear_bit_unlock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
  }
  
@@ -260,7 +260,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
  {
  	int ret, i;
-@@ -1767,6 +1916,9 @@ static int mt_probe(struct hid_device *h
+@@ -1774,6 +1923,9 @@ static int mt_probe(struct hid_device *h
  	td->inputmode_value = MT_INPUTMODE_TOUCHSCREEN;
  	hid_set_drvdata(hdev, td);
  
@@ -270,29 +270,23 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	INIT_LIST_HEAD(&td->applications);
  	INIT_LIST_HEAD(&td->reports);
  
-@@ -1805,15 +1957,19 @@ static int mt_probe(struct hid_device *h
- 	timer_setup(&td->release_timer, mt_expired_timeout, 0);
+@@ -1813,6 +1965,7 @@ static int mt_probe(struct hid_device *h
  
  	ret = hid_parse(hdev);
--	if (ret != 0)
-+	if (ret != 0) {
+ 	if (ret != 0)
 +		unregister_pm_notifier(&td->pm_notifier);
  		return ret;
-+	}
  
  	if (mtclass->quirks & MT_QUIRK_FIX_CONST_CONTACT_ID)
- 		mt_fix_const_fields(hdev, HID_DG_CONTACTID);
+@@ -1823,6 +1976,7 @@ static int mt_probe(struct hid_device *h
  
  	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
--	if (ret)
-+	if (ret) {
+ 	if (ret)
 +		unregister_pm_notifier(&td->pm_notifier);
  		return ret;
-+	}
  
  	ret = sysfs_create_group(&hdev->dev.kobj, &mt_attribute_group);
- 	if (ret)
-@@ -1841,13 +1997,24 @@ static int mt_suspend(struct hid_device
+@@ -1851,13 +2005,24 @@ static int mt_suspend(struct hid_device
  
  static int mt_reset_resume(struct hid_device *hdev)
  {
@@ -317,7 +311,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	/* Some Elan legacy devices require SET_IDLE to be set on resume.
  	 * It should be safe to send it to other devices too.
  	 * Tested on 3M, Stantum, Cypress, Zytronic, eGalax, and Elan panels. */
-@@ -1856,13 +2023,33 @@ static int mt_resume(struct hid_device *
+@@ -1866,13 +2031,33 @@ static int mt_resume(struct hid_device *
  
  	mt_set_modes(hdev, HID_LATENCY_NORMAL, true, true);
  
@@ -351,7 +345,7 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	del_timer_sync(&td->release_timer);
  
  	sysfs_remove_group(&hdev->dev.kobj, &mt_attribute_group);
-@@ -2267,6 +2454,11 @@ static const struct hid_device_id mt_dev
+@@ -2286,6 +2471,11 @@ static const struct hid_device_id mt_dev
  		MT_USB_DEVICE(USB_VENDOR_ID_XIROKU,
  			USB_DEVICE_ID_XIROKU_CSR2) },
  
@@ -364,8 +358,8 @@ diff -rupN a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
  	{ .driver_data = MT_CLS_GOOGLE,
  		HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY, USB_VENDOR_ID_GOOGLE,
 diff -rupN a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
---- a/drivers/usb/core/quirks.c	2024-09-08 23:50:28.000000000 +0200
-+++ b/drivers/usb/core/quirks.c	2024-09-15 12:20:23.773754581 +0200
+--- a/drivers/usb/core/quirks.c	2024-09-19 09:49:10.000000000 +0200
++++ b/drivers/usb/core/quirks.c	2024-09-19 11:23:41.236338301 +0200
 @@ -223,6 +223,9 @@ static const struct usb_device_id usb_qu
  	/* Microsoft Surface Dock Ethernet (RTL8153 GigE) */
  	{ USB_DEVICE(0x045e, 0x07c6), .driver_info = USB_QUIRK_NO_LPM },
