@@ -1,5 +1,8 @@
 Patches for 6.11-rcX
 
+2024-09-20
+- synced with upstream
+
 2024-09-17
 - seems to work with 6.11 final
 
