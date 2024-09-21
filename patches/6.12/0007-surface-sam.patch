@@ -1,6 +1,6 @@
 diff -rupN a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
---- a/drivers/hwmon/Kconfig	2024-09-19 09:49:10.000000000 +0200
-+++ b/drivers/hwmon/Kconfig	2024-09-19 11:18:43.084544589 +0200
+--- a/drivers/hwmon/Kconfig	2024-09-21 04:34:00.000000000 +0200
++++ b/drivers/hwmon/Kconfig	2024-09-21 12:17:12.503863177 +0200
 @@ -2104,6 +2104,16 @@ config SENSORS_SURFACE_TEMP
  	  This driver can also be built as a module. If so, the module
  	  will be called surface_temp.
@@ -18,53 +18,26 @@ diff -rupN a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
  config SENSORS_ADC128D818
  	tristate "Texas Instruments ADC128D818"
  	depends on I2C
-diff -rupN a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
---- a/drivers/platform/surface/surface_aggregator_registry.c	2024-09-19 09:49:10.000000000 +0200
-+++ b/drivers/platform/surface/surface_aggregator_registry.c	2024-09-19 11:18:51.579626563 +0200
-@@ -254,7 +254,9 @@ static const struct software_node *ssam_
- 	&ssam_node_root,
- 	&ssam_node_bat_ac,
- 	&ssam_node_bat_main,
--	&ssam_node_tmp_perf_profile,
-+	&ssam_node_tmp_perf_profile_with_fan,
-+	&ssam_node_tmp_sensors,
-+	&ssam_node_fan_speed,
- 	&ssam_node_hid_main_keyboard,
- 	&ssam_node_hid_main_touchpad,
- 	&ssam_node_hid_main_iid5,
-@@ -390,6 +392,25 @@ static const struct software_node *ssam_
- 	NULL,
- };
+diff -rupN a/drivers/hwmon/surface_temp.c b/drivers/hwmon/surface_temp.c
+--- a/drivers/hwmon/surface_temp.c	2024-09-21 04:34:00.000000000 +0200
++++ b/drivers/hwmon/surface_temp.c	2024-09-21 12:27:49.672564580 +0200
+@@ -27,7 +27,7 @@
+  * zeros after the name, so perhaps they can be longer. This number reflects
+  * the maximum zero-padded space observed in the returned buffer.
+  */
+-#define SSAM_TMP_SENSOR_NAME_LENGTH	18
++#define SSAM_TMP_SENSOR_NAME_LENGTH 18
  
-+/* Devices for Surface Pro 10 */
-+static const struct software_node *ssam_node_group_sp10[] = {
-+	&ssam_node_root,
-+	&ssam_node_hub_kip,
-+	&ssam_node_bat_ac,
-+	&ssam_node_bat_main,
-+	&ssam_node_tmp_perf_profile_with_fan,
-+	&ssam_node_tmp_sensors,
-+	&ssam_node_fan_speed,
-+	&ssam_node_pos_tablet_switch,
-+	&ssam_node_hid_kip_keyboard,
-+	&ssam_node_hid_kip_penstash,
-+	&ssam_node_hid_kip_touchpad,
-+	&ssam_node_hid_kip_fwupd,
-+	&ssam_node_hid_sam_sensors,
-+	&ssam_node_hid_sam_ucm_ucsi,
-+	NULL,
-+};
-+
- 
- /* -- SSAM platform/meta-hub driver. ---------------------------------------- */
- 
-@@ -415,6 +436,9 @@ static const struct acpi_device_id ssam_
- 	/* Surface Pro 10 */
- 	{ "MSHW0510", (unsigned long)ssam_node_group_sp9 },
- 
-+	/* Surface Pro 10 */
-+	{ "MSHW0510", (unsigned long)ssam_node_group_sp10 },
-+
- 	/* Surface Book 2 */
- 	{ "MSHW0107", (unsigned long)ssam_node_group_gen5 },
- 
+ struct ssam_tmp_get_name_rsp {
+ 	__le16 unknown1;
+@@ -148,6 +148,10 @@ static int ssam_temp_hwmon_read_string(s
+ static const struct hwmon_channel_info * const ssam_temp_hwmon_info[] = {
+ 	HWMON_CHANNEL_INFO(chip,
+ 			   HWMON_C_REGISTER_TZ),
++	/*
++	 * We have at most SSAM_TMP_SENSOR_MAX_COUNT = 16 thermal sensor
++	 * channels.
++	 */
+ 	HWMON_CHANNEL_INFO(temp,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
