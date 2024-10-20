@@ -1,5 +1,8 @@
 Patches for 6.11-rcX
 
+2024-10-20
+- sync with master
+
 2024-10-17
 - offset fixes for 6.11.4
 
