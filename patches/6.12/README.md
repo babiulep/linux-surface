@@ -1,5 +1,8 @@
 Patches for 6.12-rcX
 
+2024-10-22
+- updates for mainline commit c2ee9f594da826bea183ed14f2cc029c719bf4da
+
 2024-10-17
 - offset fixes
 
