@@ -1,5 +1,8 @@
 Patches for 6.12-rcX
 
+2024-11-30
+- add ipu6 fix for 6.12.x
+
 2024-10-17
 - offset fixes
 
