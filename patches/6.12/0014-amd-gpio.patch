@@ -1,6 +1,6 @@
 diff -rupN a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
---- a/arch/x86/kernel/acpi/boot.c	2024-10-17 10:15:49.000000000 +0200
-+++ b/arch/x86/kernel/acpi/boot.c	2024-10-17 14:21:57.382424359 +0200
+--- a/arch/x86/kernel/acpi/boot.c	2024-12-05 14:03:10.000000000 +0100
++++ b/arch/x86/kernel/acpi/boot.c	2024-12-08 22:17:56.550432445 +0100
 @@ -22,6 +22,7 @@
  #include <linux/efi-bgrt.h>
  #include <linux/serial_core.h>
@@ -34,7 +34,7 @@ diff -rupN a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
  /*
   * Parse IOAPIC related entries in MADT
   * returns 0 on success, < 0 on error
-@@ -1188,6 +1207,11 @@ static int __init acpi_parse_madt_ioapic
+@@ -1187,6 +1206,11 @@ static int __init acpi_parse_madt_ioapic
  		acpi_sci_ioapic_setup(acpi_gbl_FADT.sci_interrupt, 0, 0,
  				      acpi_gbl_FADT.sci_interrupt);
  
