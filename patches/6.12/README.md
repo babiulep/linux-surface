@@ -1,5 +1,8 @@
 Patches for 6.12-rcX
 
+2024-12-11
+- sync with official repo
+
 2024-12-08
 - offset fixes
 
