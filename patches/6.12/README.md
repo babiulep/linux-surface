@@ -1,5 +1,8 @@
 Patches for 6.12-rcX
 
+2025-02-01
+- offset fixes for 6.12.12
+
 2024-12-20
 - offset fixes for 6.12.6
 
