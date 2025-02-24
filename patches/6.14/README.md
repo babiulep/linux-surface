@@ -1,5 +1,8 @@
 Patches for 6.14.x
 
+2025-02-24
+- fixes for 6.14-rc4
+
 2025-02-20
 - fixes from https://github.com/tabletseeker/linux-surface
 - add kernel.sh: Automatically applies all patches while  
