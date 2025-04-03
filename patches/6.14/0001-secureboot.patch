@@ -1,6 +1,6 @@
 diff -rupN a/arch/x86/boot/header.S b/arch/x86/boot/header.S
---- a/arch/x86/boot/header.S	2025-03-23 10:37:44.000000000 +0100
-+++ b/arch/x86/boot/header.S	2025-03-23 20:06:00.351153041 +0100
+--- a/arch/x86/boot/header.S	2025-04-03 17:16:20.000000000 +0200
++++ b/arch/x86/boot/header.S	2025-04-03 22:12:54.549897274 +0200
 @@ -111,7 +111,11 @@ extra_header_fields:
  	.long	salign				# SizeOfHeaders
  	.long	0				# CheckSum
@@ -14,9 +14,9 @@ diff -rupN a/arch/x86/boot/header.S b/arch/x86/boot/header.S
  	.long	0				# SizeOfStackReserve
  	.long	0				# SizeOfStackCommit
 diff -rupN a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
---- a/Documentation/admin-guide/kernel-parameters.txt	2025-03-23 10:37:44.000000000 +0100
-+++ b/Documentation/admin-guide/kernel-parameters.txt	2025-03-23 20:06:00.357546256 +0100
-@@ -3150,6 +3150,11 @@
+--- a/Documentation/admin-guide/kernel-parameters.txt	2025-04-03 17:16:20.000000000 +0200
++++ b/Documentation/admin-guide/kernel-parameters.txt	2025-04-03 22:12:54.551891031 +0200
+@@ -3154,6 +3154,11 @@
  			to extract confidential information from the kernel
  			are also disabled.
  
@@ -29,8 +29,8 @@ diff -rupN a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/adm
  			Set the time limit in jiffies for a lock
  			acquisition.  Acquisitions exceeding this limit
 diff -rupN a/kernel/power/hibernate.c b/kernel/power/hibernate.c
---- a/kernel/power/hibernate.c	2025-03-23 10:37:44.000000000 +0100
-+++ b/kernel/power/hibernate.c	2025-03-23 20:06:00.358546262 +0100
+--- a/kernel/power/hibernate.c	2025-04-03 17:16:20.000000000 +0200
++++ b/kernel/power/hibernate.c	2025-04-03 22:12:54.554081106 +0200
 @@ -37,6 +37,7 @@
  #include "power.h"
  
