@@ -1,15 +1,15 @@
 diff -rupN a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
---- a/arch/x86/kernel/acpi/boot.c	2025-02-23 19:19:30.000000000 +0100
-+++ b/arch/x86/kernel/acpi/boot.c	2025-02-24 15:20:05.167761347 +0100
+--- a/arch/x86/kernel/acpi/boot.c	2025-04-16 20:32:08.000000000 +0200
++++ b/arch/x86/kernel/acpi/boot.c	2025-04-17 10:24:33.017636208 +0200
 @@ -22,6 +22,7 @@
  #include <linux/efi-bgrt.h>
  #include <linux/serial_core.h>
  #include <linux/pgtable.h>
 +#include <linux/dmi.h>
  
- #include <asm/e820/api.h>
- #include <asm/irqdomain.h>
-@@ -1169,6 +1170,24 @@ static void __init mp_config_acpi_legacy
+ #include <xen/xen.h>
+ 
+@@ -1171,6 +1172,24 @@ static void __init mp_config_acpi_legacy
  	}
  }
  
@@ -34,7 +34,7 @@ diff -rupN a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
  /*
   * Parse IOAPIC related entries in MADT
   * returns 0 on success, < 0 on error
-@@ -1225,6 +1244,11 @@ static int __init acpi_parse_madt_ioapic
+@@ -1227,6 +1246,11 @@ static int __init acpi_parse_madt_ioapic
  		acpi_sci_ioapic_setup(acpi_gbl_FADT.sci_interrupt, 0, 0,
  				      acpi_gbl_FADT.sci_interrupt);
  
