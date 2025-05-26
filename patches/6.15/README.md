@@ -1,5 +1,8 @@
 Patches for 6.14.x
 
+2025-05-26:
+- offset fixes for 6.15 release
+
 2025-04-17
 - fixes for 6.15-rc2
 
