@@ -1,5 +1,8 @@
 Patches for 6.16.x
 
+2025-07-26:
+- offset fixes (post) 6.16-rc7
+
 2025-06-22:
 - testing new versions based on latest 6.15-surface patches
 
