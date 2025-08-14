@@ -1,5 +1,8 @@
 Patches for 6.16.x
 
+2025-08-14:
+- offset fixes (pre) 6.16.1-rc1
+
 2025-07-26:
 - offset fixes (post) 6.16-rc7
 
