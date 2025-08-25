@@ -1,4 +1,7 @@
-Patches for 6.14.x
+Patches for 6.15.x
+
+2025-08-26:
+- sync with pull request 1817
 
 2025-05-26:
 - offset fixes for 6.15 release

@@ -1,5 +1,8 @@
 Patches for 6.16.x
 
+2025-08-26:
+- sync with pull request 1817
+
 2025-08-14:
 - offset fixes (pre) 6.16.1-rc1
 
