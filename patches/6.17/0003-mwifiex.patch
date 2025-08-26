@@ -1,6 +1,6 @@
 diff -rupN a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
---- a/drivers/bluetooth/btusb.c	2025-07-28 10:44:12.000000000 +0200
-+++ b/drivers/bluetooth/btusb.c	2025-07-28 14:03:04.662797324 +0200
+--- a/drivers/bluetooth/btusb.c	2025-08-26 10:57:01.000000000 +0200
++++ b/drivers/bluetooth/btusb.c	2025-08-26 12:43:17.464835400 +0200
 @@ -66,6 +66,7 @@ static struct usb_driver btusb_driver;
  #define BTUSB_INTEL_BROKEN_INITIAL_NCMD BIT(25)
  #define BTUSB_INTEL_NO_WBS_SUPPORT	BIT(26)
@@ -17,7 +17,7 @@ diff -rupN a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
  
  	/* Intel Bluetooth devices */
  	{ USB_DEVICE(0x8087, 0x0025), .driver_info = BTUSB_INTEL_COMBINED },
-@@ -4129,6 +4131,19 @@ static int btusb_probe(struct usb_interf
+@@ -4131,6 +4133,19 @@ static int btusb_probe(struct usb_interf
  	if (id->driver_info & BTUSB_MARVELL)
  		hdev->set_bdaddr = btusb_set_bdaddr_marvell;
  
@@ -38,8 +38,8 @@ diff -rupN a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
  	    (id->driver_info & BTUSB_MEDIATEK)) {
  		hdev->setup = btusb_mtk_setup;
 diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie.c b/drivers/net/wireless/marvell/mwifiex/pcie.c
---- a/drivers/net/wireless/marvell/mwifiex/pcie.c	2025-07-28 10:44:12.000000000 +0200
-+++ b/drivers/net/wireless/marvell/mwifiex/pcie.c	2025-07-28 14:03:04.838798419 +0200
+--- a/drivers/net/wireless/marvell/mwifiex/pcie.c	2025-08-26 10:57:01.000000000 +0200
++++ b/drivers/net/wireless/marvell/mwifiex/pcie.c	2025-08-26 12:43:17.461769578 +0200
 @@ -377,6 +377,7 @@ static int mwifiex_pcie_probe(struct pci
  					const struct pci_device_id *ent)
  {
@@ -84,8 +84,8 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie.c b/drivers/net/wireless/
  	mwifiex_write_reg(adapter, reg->rx_rdptr, card->rxbd_rdptr | tx_wrap);
  }
 diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c
---- a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c	2025-07-28 10:44:12.000000000 +0200
-+++ b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c	2025-07-28 14:03:04.840846520 +0200
+--- a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c	2025-08-26 10:57:01.000000000 +0200
++++ b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c	2025-08-26 12:43:17.463728723 +0200
 @@ -13,7 +13,9 @@ static const struct dmi_system_id mwifie
  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
  			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Surface Pro 4"),
@@ -187,8 +187,8 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wi
  
  static void mwifiex_pcie_set_power_d3cold(struct pci_dev *pdev)
 diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h
---- a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h	2025-07-28 10:44:12.000000000 +0200
-+++ b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h	2025-07-28 14:03:04.841210581 +0200
+--- a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h	2025-08-26 10:57:01.000000000 +0200
++++ b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h	2025-08-26 12:43:17.463902821 +0200
 @@ -4,6 +4,8 @@
  #include "pcie.h"
  

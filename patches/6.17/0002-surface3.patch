@@ -1,6 +1,6 @@
 diff -rupN a/drivers/input/touchscreen/surface3_spi.c b/drivers/input/touchscreen/surface3_spi.c
---- a/drivers/input/touchscreen/surface3_spi.c	2025-07-25 22:36:35.000000000 +0200
-+++ b/drivers/input/touchscreen/surface3_spi.c	2025-07-26 17:47:59.172826599 +0200
+--- a/drivers/input/touchscreen/surface3_spi.c	2025-08-26 10:57:01.000000000 +0200
++++ b/drivers/input/touchscreen/surface3_spi.c	2025-08-26 12:42:09.688307674 +0200
 @@ -25,6 +25,12 @@
  #define SURFACE3_REPORT_TOUCH	0xd2
  #define SURFACE3_REPORT_PEN	0x16
@@ -49,8 +49,8 @@ diff -rupN a/drivers/input/touchscreen/surface3_spi.c b/drivers/input/touchscree
  }
  
 diff -rupN a/drivers/platform/surface/surface3-wmi.c b/drivers/platform/surface/surface3-wmi.c
---- a/drivers/platform/surface/surface3-wmi.c	2025-07-25 22:36:35.000000000 +0200
-+++ b/drivers/platform/surface/surface3-wmi.c	2025-07-26 17:47:59.454803481 +0200
+--- a/drivers/platform/surface/surface3-wmi.c	2025-08-26 10:57:01.000000000 +0200
++++ b/drivers/platform/surface/surface3-wmi.c	2025-08-26 12:42:09.686144575 +0200
 @@ -37,6 +37,13 @@ static const struct dmi_system_id surfac
  			DMI_MATCH(DMI_PRODUCT_NAME, "Surface 3"),
  		},
@@ -66,8 +66,8 @@ diff -rupN a/drivers/platform/surface/surface3-wmi.c b/drivers/platform/surface/
  	{ }
  };
 diff -rupN a/sound/soc/codecs/rt5645.c b/sound/soc/codecs/rt5645.c
---- a/sound/soc/codecs/rt5645.c	2025-07-25 22:36:35.000000000 +0200
-+++ b/sound/soc/codecs/rt5645.c	2025-07-26 17:47:59.778776918 +0200
+--- a/sound/soc/codecs/rt5645.c	2025-08-26 10:57:01.000000000 +0200
++++ b/sound/soc/codecs/rt5645.c	2025-08-26 12:42:09.687307666 +0200
 @@ -3793,6 +3793,15 @@ static const struct dmi_system_id dmi_pl
  		.driver_data = (void *)&intel_braswell_platform_data,
  	},
@@ -85,8 +85,8 @@ diff -rupN a/sound/soc/codecs/rt5645.c b/sound/soc/codecs/rt5645.c
  		 * Match for the GPDwin which unfortunately uses somewhat
  		 * generic dmi strings, which is why we test for 4 strings.
 diff -rupN a/sound/soc/intel/common/soc-acpi-intel-cht-match.c b/sound/soc/intel/common/soc-acpi-intel-cht-match.c
---- a/sound/soc/intel/common/soc-acpi-intel-cht-match.c	2025-07-25 22:36:35.000000000 +0200
-+++ b/sound/soc/intel/common/soc-acpi-intel-cht-match.c	2025-07-26 17:47:59.866769704 +0200
+--- a/sound/soc/intel/common/soc-acpi-intel-cht-match.c	2025-08-26 10:57:01.000000000 +0200
++++ b/sound/soc/intel/common/soc-acpi-intel-cht-match.c	2025-08-26 12:42:09.688142420 +0200
 @@ -27,6 +27,14 @@ static const struct dmi_system_id cht_ta
  			DMI_MATCH(DMI_PRODUCT_NAME, "Surface 3"),
  		},

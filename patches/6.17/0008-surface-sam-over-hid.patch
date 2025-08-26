@@ -1,6 +1,6 @@
 diff -rupN a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
---- a/drivers/i2c/i2c-core-acpi.c	2025-08-10 20:28:38.000000000 +0200
-+++ b/drivers/i2c/i2c-core-acpi.c	2025-08-10 21:25:03.575001679 +0200
+--- a/drivers/i2c/i2c-core-acpi.c	2025-08-26 10:57:01.000000000 +0200
++++ b/drivers/i2c/i2c-core-acpi.c	2025-08-26 12:47:00.637249727 +0200
 @@ -662,6 +662,27 @@ static int acpi_gsb_i2c_write_bytes(stru
  	return (ret == 1) ? 0 : -EIO;
  }
@@ -50,8 +50,8 @@ diff -rupN a/drivers/i2c/i2c-core-acpi.c b/drivers/i2c/i2c-core-acpi.c
  	default:
  		dev_warn(&adapter->dev, "protocol 0x%02x not supported for client 0x%02x\n",
 diff -rupN a/drivers/platform/surface/Kconfig b/drivers/platform/surface/Kconfig
---- a/drivers/platform/surface/Kconfig	2025-08-10 20:28:38.000000000 +0200
-+++ b/drivers/platform/surface/Kconfig	2025-08-10 21:25:03.575529154 +0200
+--- a/drivers/platform/surface/Kconfig	2025-08-26 10:57:01.000000000 +0200
++++ b/drivers/platform/surface/Kconfig	2025-08-26 12:47:00.638029269 +0200
 @@ -149,6 +149,13 @@ config SURFACE_AGGREGATOR_TABLET_SWITCH
  	  Select M or Y here, if you want to provide tablet-mode switch input
  	  events on the Surface Pro 8, Surface Pro X, and Surface Laptop Studio.
@@ -67,8 +67,8 @@ diff -rupN a/drivers/platform/surface/Kconfig b/drivers/platform/surface/Kconfig
  	tristate "Surface DTX (Detachment System) Driver"
  	depends on SURFACE_AGGREGATOR
 diff -rupN a/drivers/platform/surface/Makefile b/drivers/platform/surface/Makefile
---- a/drivers/platform/surface/Makefile	2025-08-10 20:28:38.000000000 +0200
-+++ b/drivers/platform/surface/Makefile	2025-08-10 21:25:03.575775489 +0200
+--- a/drivers/platform/surface/Makefile	2025-08-26 10:57:01.000000000 +0200
++++ b/drivers/platform/surface/Makefile	2025-08-26 12:47:00.638274641 +0200
 @@ -12,6 +12,7 @@ obj-$(CONFIG_SURFACE_AGGREGATOR_CDEV)	+=
  obj-$(CONFIG_SURFACE_AGGREGATOR_HUB)	+= surface_aggregator_hub.o
  obj-$(CONFIG_SURFACE_AGGREGATOR_REGISTRY) += surface_aggregator_registry.o
@@ -79,7 +79,7 @@ diff -rupN a/drivers/platform/surface/Makefile b/drivers/platform/surface/Makefi
  obj-$(CONFIG_SURFACE_HOTPLUG)		+= surface_hotplug.o
 diff -rupN a/drivers/platform/surface/surfacebook1_dgpu_switch.c b/drivers/platform/surface/surfacebook1_dgpu_switch.c
 --- a/drivers/platform/surface/surfacebook1_dgpu_switch.c	1970-01-01 01:00:00.000000000 +0100
-+++ b/drivers/platform/surface/surfacebook1_dgpu_switch.c	2025-08-10 21:25:03.576069562 +0200
++++ b/drivers/platform/surface/surfacebook1_dgpu_switch.c	2025-08-26 12:47:00.638600702 +0200
 @@ -0,0 +1,136 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +
