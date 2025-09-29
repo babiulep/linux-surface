@@ -1,5 +1,8 @@
 Patches for 6.17.x
 
+2025-09-29:
+- patches for linux-6.17
+
 2025-08-26:
 - patches for linux-6.17-rc3
 

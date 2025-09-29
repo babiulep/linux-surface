@@ -1,6 +1,6 @@
 diff -rupN a/arch/x86/boot/header.S b/arch/x86/boot/header.S
---- a/arch/x86/boot/header.S	2025-08-26 10:57:01.000000000 +0200
-+++ b/arch/x86/boot/header.S	2025-08-26 12:41:36.594352094 +0200
+--- a/arch/x86/boot/header.S	2025-09-28 23:39:22.000000000 +0200
++++ b/arch/x86/boot/header.S	2025-09-29 11:31:52.248744178 +0200
 @@ -111,7 +111,11 @@ extra_header_fields:
  	.long	salign				# SizeOfHeaders
  	.long	0				# CheckSum
@@ -14,8 +14,8 @@ diff -rupN a/arch/x86/boot/header.S b/arch/x86/boot/header.S
  	.long	0				# SizeOfStackReserve
  	.long	0				# SizeOfStackCommit
 diff -rupN a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
---- a/Documentation/admin-guide/kernel-parameters.txt	2025-08-26 10:57:01.000000000 +0200
-+++ b/Documentation/admin-guide/kernel-parameters.txt	2025-08-26 12:41:36.594838843 +0200
+--- a/Documentation/admin-guide/kernel-parameters.txt	2025-09-28 23:39:22.000000000 +0200
++++ b/Documentation/admin-guide/kernel-parameters.txt	2025-09-29 11:31:52.404745513 +0200
 @@ -3298,6 +3298,11 @@
  			to extract confidential information from the kernel
  			are also disabled.
@@ -29,8 +29,8 @@ diff -rupN a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/adm
  			Set the time limit in jiffies for a lock
  			acquisition.  Acquisitions exceeding this limit
 diff -rupN a/kernel/power/hibernate.c b/kernel/power/hibernate.c
---- a/kernel/power/hibernate.c	2025-08-26 10:57:01.000000000 +0200
-+++ b/kernel/power/hibernate.c	2025-08-26 12:41:36.595356867 +0200
+--- a/kernel/power/hibernate.c	2025-09-28 23:39:22.000000000 +0200
++++ b/kernel/power/hibernate.c	2025-09-29 11:31:52.406705200 +0200
 @@ -38,6 +38,7 @@
  #include "power.h"
  
@@ -48,7 +48,7 @@ diff -rupN a/kernel/power/hibernate.c b/kernel/power/hibernate.c
  		!secretmem_active() && !cxl_mem_active();
  }
  
-@@ -1482,6 +1483,12 @@ static int __init nohibernate_setup(char
+@@ -1483,6 +1484,12 @@ static int __init nohibernate_setup(char
  	return 1;
  }
  
@@ -61,7 +61,7 @@ diff -rupN a/kernel/power/hibernate.c b/kernel/power/hibernate.c
  static const char * const comp_alg_enabled[] = {
  #if IS_ENABLED(CONFIG_CRYPTO_LZO)
  	COMPRESSION_ALGO_LZO,
-@@ -1539,3 +1546,4 @@ __setup("hibernate=", hibernate_setup);
+@@ -1540,3 +1547,4 @@ __setup("hibernate=", hibernate_setup);
  __setup("resumewait", resumewait_setup);
  __setup("resumedelay=", resumedelay_setup);
  __setup("nohibernate", nohibernate_setup);
