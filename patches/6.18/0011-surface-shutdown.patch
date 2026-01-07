@@ -1,7 +1,32 @@
-diff -rupN a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
---- a/drivers/pci/pci-driver.c	2025-11-27 10:04:16.000000000 +0100
-+++ b/drivers/pci/pci-driver.c	2025-11-27 12:24:27.578453766 +0100
-@@ -505,6 +505,9 @@ static void pci_device_shutdown(struct d
+From 790ea29fa1c48f6ff4cf5bda8ce549c8ee5a740a Mon Sep 17 00:00:00 2001
+From: Maximilian Luz <luzmaximilian@gmail.com>
+Date: Sun, 19 Feb 2023 22:12:24 +0100
+Subject: [PATCH] PCI: Add quirk to prevent calling shutdown method
+
+Work around buggy EFI firmware: On some Microsoft Surface devices
+(Surface Pro 9 and Surface Laptop 5) the EFI ResetSystem call with
+EFI_RESET_SHUTDOWN doesn't function properly. Instead of shutting the
+system down, it returns and the system stays on.
+
+It turns out that this only happens after PCI shutdown callbacks ran for
+specific devices. Excluding those devices from the shutdown process
+makes the ResetSystem call work as expected.
+
+TODO: Maybe we can find a better way or the root cause of this?
+
+Not-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+Patchset: surface-shutdown
+---
+ drivers/pci/pci-driver.c |  3 +++
+ drivers/pci/quirks.c     | 36 ++++++++++++++++++++++++++++++++++++
+ include/linux/pci.h      |  1 +
+ 3 files changed, 40 insertions(+)
+
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 302d61783f6c..4a8a08bd92dd 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -505,6 +505,9 @@ static void pci_device_shutdown(struct device *dev)
  	struct pci_dev *pci_dev = to_pci_dev(dev);
  	struct pci_driver *drv = pci_dev->driver;
  
@@ -11,10 +36,11 @@ diff -rupN a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
  	pm_runtime_resume(dev);
  
  	if (drv && drv->shutdown)
-diff -rupN a/drivers/pci/quirks.c b/drivers/pci/quirks.c
---- a/drivers/pci/quirks.c	2025-11-27 10:04:16.000000000 +0100
-+++ b/drivers/pci/quirks.c	2025-11-27 12:24:27.592453924 +0100
-@@ -6341,3 +6341,39 @@ static void pci_mask_replay_timer_timeou
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index b9c252aa6fe0..ce4c0da99537 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -6341,3 +6341,39 @@ static void pci_mask_replay_timer_timeout(struct pci_dev *pdev)
  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_GLI, 0x9750, pci_mask_replay_timer_timeout);
  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_GLI, 0x9755, pci_mask_replay_timer_timeout);
  #endif
@@ -54,9 +80,10 @@ diff -rupN a/drivers/pci/quirks.c b/drivers/pci/quirks.c
 +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x462f, quirk_no_shutdown);  // Thunderbolt 4 PCI Express Root Port
 +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x466d, quirk_no_shutdown);  // Thunderbolt 4 NHI
 +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x46a8, quirk_no_shutdown);  // GPU
-diff -rupN a/include/linux/pci.h b/include/linux/pci.h
---- a/include/linux/pci.h	2025-11-27 10:04:16.000000000 +0100
-+++ b/include/linux/pci.h	2025-11-27 12:24:27.598453992 +0100
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index bf97d49c23cf..90eead93d825 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
 @@ -487,6 +487,7 @@ struct pci_dev {
  	unsigned int	rom_bar_overlap:1;	/* ROM BAR disable broken */
  	unsigned int	rom_attr_enabled:1;	/* Display of ROM attribute enabled? */
@@ -65,3 +92,49 @@ diff -rupN a/include/linux/pci.h b/include/linux/pci.h
  	pci_dev_flags_t dev_flags;
  	atomic_t	enable_cnt;	/* pci_enable_device has been called */
  
+-- 
+2.52.0
+
+From a4f65698937823a5e3210932c52640ac2115837e Mon Sep 17 00:00:00 2001
+From: LegendaryFire <tristan.balon@outlook.com>
+Date: Wed, 7 Jan 2026 01:06:25 +0100
+Subject: [PATCH] PCI: Add Surface Laptop Studio 2 devices to shutdown ops
+ quirk
+
+Link: https://github.com/linux-surface/linux-surface/pull/1948
+Patchset: surface-shutdown
+---
+ drivers/pci/quirks.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index ce4c0da99537..fdc410bf70e5 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -6360,6 +6360,13 @@ static const struct dmi_system_id no_shutdown_dmi_table[] = {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "Surface Laptop 5"),
+ 		},
+ 	},
++	{
++		.ident = "Microsoft Surface Laptop Studio 2",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Surface Laptop Studio 2"),
++		},
++	},
+ 	{}
+ };
+ 
+@@ -6377,3 +6384,9 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x461f, quirk_no_shutdown);  // Thu
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x462f, quirk_no_shutdown);  // Thunderbolt 4 PCI Express Root Port
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x466d, quirk_no_shutdown);  // Thunderbolt 4 NHI
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x46a8, quirk_no_shutdown);  // GPU
++
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0xa76e, quirk_no_shutdown);  // Thunderbolt 4 USB Controller
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0xa71e, quirk_no_shutdown);  // Thunderbolt 4 PCI Express Root Port
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0xa73f, quirk_no_shutdown);  // Thunderbolt 4 PCI Express Root Port
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0xa73e, quirk_no_shutdown);  // Thunderbolt 4 NHI
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0xa7a0, quirk_no_shutdown);  // GPU
+-- 
+2.52.0
+
