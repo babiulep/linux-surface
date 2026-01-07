@@ -1,6 +1,6 @@
 diff -rupN a/drivers/acpi/acpi_tad.c b/drivers/acpi/acpi_tad.c
---- a/drivers/acpi/acpi_tad.c	2025-12-31 10:56:44.000000000 +0100
-+++ b/drivers/acpi/acpi_tad.c	2025-12-31 19:55:27.831867054 +0100
+--- a/drivers/acpi/acpi_tad.c	2026-01-04 23:41:55.000000000 +0100
++++ b/drivers/acpi/acpi_tad.c	2026-01-07 11:43:39.125314212 +0100
 @@ -438,6 +438,14 @@ static ssize_t caps_show(struct device *
  
  static DEVICE_ATTR_RO(caps);
@@ -35,7 +35,7 @@ diff -rupN a/drivers/acpi/acpi_tad.c b/drivers/acpi/acpi_tad.c
  };
  
  static ssize_t dc_alarm_store(struct device *dev, struct device_attribute *attr,
-@@ -571,6 +578,9 @@ static void acpi_tad_remove(struct platf
+@@ -571,14 +578,19 @@ static void acpi_tad_remove(struct platf
  	if (dd->capabilities & ACPI_TAD_RT)
  		sysfs_remove_group(&dev->kobj, &acpi_tad_time_attr_group);
  
@@ -45,10 +45,11 @@ diff -rupN a/drivers/acpi/acpi_tad.c b/drivers/acpi/acpi_tad.c
  	if (dd->capabilities & ACPI_TAD_DC_WAKE)
  		sysfs_remove_group(&dev->kobj, &acpi_tad_dc_attr_group);
  
-@@ -579,6 +589,10 @@ static void acpi_tad_remove(struct platf
+ 	sysfs_remove_group(&dev->kobj, &acpi_tad_attr_group);
+ 
  	scoped_guard(pm_runtime_noresume, dev) {
- 		acpi_tad_disable_timer(dev, ACPI_TAD_AC_TIMER);
- 		acpi_tad_clear_status(dev, ACPI_TAD_AC_TIMER);
+-		acpi_tad_disable_timer(dev, ACPI_TAD_AC_TIMER);
+-		acpi_tad_clear_status(dev, ACPI_TAD_AC_TIMER);
 +		if (dd->capabilities & ACPI_TAD_AC_WAKE) {
 +			acpi_tad_disable_timer(dev, ACPI_TAD_AC_TIMER);
 +			acpi_tad_clear_status(dev, ACPI_TAD_AC_TIMER);
@@ -56,7 +57,7 @@ diff -rupN a/drivers/acpi/acpi_tad.c b/drivers/acpi/acpi_tad.c
  		if (dd->capabilities & ACPI_TAD_DC_WAKE) {
  			acpi_tad_disable_timer(dev, ACPI_TAD_DC_TIMER);
  			acpi_tad_clear_status(dev, ACPI_TAD_DC_TIMER);
-@@ -621,12 +635,6 @@ static int acpi_tad_probe(struct platfor
+@@ -621,12 +633,6 @@ static int acpi_tad_probe(struct platfor
  		goto remove_handler;
  	}
  
@@ -69,7 +70,7 @@ diff -rupN a/drivers/acpi/acpi_tad.c b/drivers/acpi/acpi_tad.c
  	dd = devm_kzalloc(dev, sizeof(*dd), GFP_KERNEL);
  	if (!dd) {
  		ret = -ENOMEM;
-@@ -657,6 +665,12 @@ static int acpi_tad_probe(struct platfor
+@@ -657,6 +663,12 @@ static int acpi_tad_probe(struct platfor
  	if (ret)
  		goto fail;
  
