@@ -12,6 +12,11 @@ on:
         description: 'Target version tag (optional, e.g., "v6.18.5"). If not specified, auto-detected.'
         required: false
         type: string
+      build:
+        description: 'Build kernel to validate rebase'
+        required: false
+        type: boolean
+        default: true
       dry_run:
         description: 'Dry run mode - skip push and tag operations'
         required: false
@@ -50,6 +55,7 @@ jobs:
           path: kernel
           ref: ${{ inputs.branch }}
           fetch-depth: 0
+          token: ${{ secrets.LINUX_SURFACE_BOT_TOKEN }}
 
       - name: Install build dependencies
         run: |
@@ -80,7 +86,7 @@ jobs:
 
       - name: Build kernel
         id: build
-        if: steps.rebase.outputs.success == 'true' && steps.rebase.outputs.already_uptodate != 'true'
+        if: steps.rebase.outputs.success == 'true' && steps.rebase.outputs.already_uptodate != 'true' && inputs.build == true
         env:
           KERNEL_VERSION: ${{ steps.rebase.outputs.kernel_version }}
           LINUX_SURFACE_DIR: ${{ github.workspace }}/linux-surface
@@ -90,7 +96,7 @@ jobs:
 
       - name: Create tag
         id: create_tag
-        if: steps.rebase.outputs.success == 'true' && steps.rebase.outputs.already_uptodate != 'true' && steps.build.outputs.build_success == 'true' && inputs.dry_run == false
+        if: steps.rebase.outputs.success == 'true' && steps.rebase.outputs.already_uptodate != 'true' && (inputs.build == false || steps.build.outputs.build_success == 'true') && inputs.dry_run == false
         env:
           FULL_VERSION: ${{ steps.rebase.outputs.full_version }}
         working-directory: kernel
@@ -101,16 +107,12 @@ jobs:
           echo "surface_tag=${SURFACE_TAG}" >> "${GITHUB_OUTPUT}"
 
       - name: Push changes
-        if: steps.rebase.outputs.success == 'true' && steps.rebase.outputs.already_uptodate != 'true' && steps.build.outputs.build_success == 'true' && inputs.dry_run == false
+        if: steps.rebase.outputs.success == 'true' && steps.rebase.outputs.already_uptodate != 'true' && (inputs.build == false || steps.build.outputs.build_success == 'true') && inputs.dry_run == false
         env:
           KERNEL_BRANCH: ${{ inputs.branch }}
           SURFACE_TAG: ${{ steps.create_tag.outputs.surface_tag }}
-          GITHUB_TOKEN: ${{ secrets.LINUX_SURFACE_BOT_TOKEN }}
         working-directory: kernel
         run: |
-          # Configure git to use token authentication
-          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/linux-surface/kernel.git"
-
           echo "Force-pushing branch ${KERNEL_BRANCH}..."
           git push --force-with-lease origin "${KERNEL_BRANCH}"
 
@@ -128,11 +130,28 @@ jobs:
           path: kernel/.config
           retention-days: 30
 
+      - name: Trigger patch generation
+        if: steps.rebase.outputs.success == 'true' && steps.rebase.outputs.already_uptodate != 'true' && (inputs.build == false || steps.build.outputs.build_success == 'true') && inputs.dry_run == false
+        env:
+          GH_TOKEN: ${{ secrets.LINUX_SURFACE_BOT_TOKEN }}
+          KERNEL_BRANCH: ${{ inputs.branch }}
+          TARGET_TAG: ${{ steps.rebase.outputs.target_tag }}
+        run: |
+          echo "Triggering patch generation for ${KERNEL_BRANCH}..."
+
+          gh workflow run generate-patches.yml \
+            --repo ${{ github.repository }} \
+            --field branch="${KERNEL_BRANCH}" \
+            --field base_version="${TARGET_TAG}"
+
+          echo "✓ Patch generation workflow triggered"
+
       - name: Generate summary
         if: always()
         env:
           REBASE_SUCCESS: ${{ steps.rebase.outputs.success }}
           ALREADY_UPTODATE: ${{ steps.rebase.outputs.already_uptodate }}
+          BUILD_ENABLED: ${{ inputs.build }}
           BUILD_SUCCESS: ${{ steps.build.outputs.build_success }}
           KERNEL_BRANCH: ${{ inputs.branch }}
           TARGET_TAG: ${{ steps.rebase.outputs.target_tag }}
@@ -148,12 +167,19 @@ jobs:
               echo "" >> $GITHUB_STEP_SUMMARY
               echo "Branch \`${KERNEL_BRANCH}\` already contains target tag \`${TARGET_TAG}\`" >> $GITHUB_STEP_SUMMARY
               echo "No rebase was necessary." >> $GITHUB_STEP_SUMMARY
-            elif [ "${BUILD_SUCCESS}" = "true" ]; then
+            elif [ "${BUILD_ENABLED}" = "false" ] || [ "${BUILD_SUCCESS}" = "true" ]; then
               echo "✅ **Status:** Success" >> $GITHUB_STEP_SUMMARY
               echo "" >> $GITHUB_STEP_SUMMARY
               echo "- **Branch:** \`${KERNEL_BRANCH}\`" >> $GITHUB_STEP_SUMMARY
               echo "- **Target tag:** \`${TARGET_TAG}\`" >> $GITHUB_STEP_SUMMARY
               echo "- **Full version:** \`${FULL_VERSION}\`" >> $GITHUB_STEP_SUMMARY
+
+              if [ "${BUILD_ENABLED}" = "false" ]; then
+                echo "- **Build:** Skipped" >> $GITHUB_STEP_SUMMARY
+              else
+                echo "- **Build:** Passed" >> $GITHUB_STEP_SUMMARY
+              fi
+
               echo "" >> $GITHUB_STEP_SUMMARY
 
               if [ "${DRY_RUN}" = "true" ]; then
@@ -163,14 +189,11 @@ jobs:
               else
                 echo "✅ Changes pushed successfully" >> $GITHUB_STEP_SUMMARY
                 echo "" >> $GITHUB_STEP_SUMMARY
-                echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+                echo "### Automatic Patch Generation" >> $GITHUB_STEP_SUMMARY
                 echo "" >> $GITHUB_STEP_SUMMARY
-                echo "Run the patch generation workflow to update patches:" >> $GITHUB_STEP_SUMMARY
-                echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-                echo "Workflow: Generate Kernel Patches" >> $GITHUB_STEP_SUMMARY
-                echo "  branch: ${KERNEL_BRANCH}" >> $GITHUB_STEP_SUMMARY
-                echo "  base_version: ${TARGET_TAG}" >> $GITHUB_STEP_SUMMARY
-                echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+                echo "Patch generation workflow has been automatically triggered." >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "Check the [Generate Kernel Patches workflow runs](../../actions/workflows/generate-patches.yml) for progress." >> $GITHUB_STEP_SUMMARY
               fi
             else
               echo "❌ **Status:** Build failed" >> $GITHUB_STEP_SUMMARY
