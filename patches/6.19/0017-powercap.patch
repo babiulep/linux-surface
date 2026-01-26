@@ -1,0 +1,11 @@
+diff -rupN a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
+--- a/drivers/powercap/intel_rapl_msr.c	2026-01-25 23:11:24.000000000 +0100
++++ b/drivers/powercap/intel_rapl_msr.c	2026-01-26 15:25:40.698829335 +0100
+@@ -162,6 +162,7 @@ static int rapl_msr_write_raw(int cpu, s
+ 
+ /* List of verified CPUs. */
+ static const struct x86_cpu_id pl4_support_ids[] = {
++	X86_MATCH_VFM(INTEL_ICELAKE_L, NULL),
+ 	X86_MATCH_VFM(INTEL_TIGERLAKE_L, NULL),
+ 	X86_MATCH_VFM(INTEL_ALDERLAKE, NULL),
+ 	X86_MATCH_VFM(INTEL_ALDERLAKE_L, NULL),

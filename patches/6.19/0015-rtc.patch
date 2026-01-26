@@ -1,6 +1,6 @@
 diff -rupN a/drivers/acpi/acpi_tad.c b/drivers/acpi/acpi_tad.c
---- a/drivers/acpi/acpi_tad.c	2026-01-04 23:41:55.000000000 +0100
-+++ b/drivers/acpi/acpi_tad.c	2026-01-07 11:43:39.125314212 +0100
+--- a/drivers/acpi/acpi_tad.c	2026-01-25 23:11:24.000000000 +0100
++++ b/drivers/acpi/acpi_tad.c	2026-01-26 15:18:57.293117853 +0100
 @@ -438,6 +438,14 @@ static ssize_t caps_show(struct device *
  
  static DEVICE_ATTR_RO(caps);
