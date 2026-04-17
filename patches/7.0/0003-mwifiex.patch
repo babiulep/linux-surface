@@ -1,6 +1,7 @@
-diff -rupN a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
---- a/drivers/bluetooth/btusb.c	2026-02-13 09:22:27.000000000 +0100
-+++ b/drivers/bluetooth/btusb.c	2026-02-13 17:15:24.051845474 +0100
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 5c535f3..e48a710 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
 @@ -67,6 +67,7 @@ static struct usb_driver btusb_driver;
  #define BTUSB_INTEL_NO_WBS_SUPPORT	BIT(26)
  #define BTUSB_ACTIONS_SEMI		BIT(27)
@@ -9,7 +10,7 @@ diff -rupN a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
  
  static const struct usb_device_id btusb_table[] = {
  	/* Generic Bluetooth USB device */
-@@ -472,6 +473,7 @@ static const struct usb_device_id quirks
+@@ -472,6 +473,7 @@ static const struct usb_device_id quirks_table[] = {
  	{ USB_DEVICE(0x1286, 0x2044), .driver_info = BTUSB_MARVELL },
  	{ USB_DEVICE(0x1286, 0x2046), .driver_info = BTUSB_MARVELL },
  	{ USB_DEVICE(0x1286, 0x204e), .driver_info = BTUSB_MARVELL },
@@ -17,7 +18,7 @@ diff -rupN a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
  
  	/* Intel Bluetooth devices */
  	{ USB_DEVICE(0x8087, 0x0025), .driver_info = BTUSB_INTEL_COMBINED },
-@@ -4234,6 +4236,19 @@ static int btusb_probe(struct usb_interf
+@@ -4237,6 +4239,19 @@ static int btusb_probe(struct usb_interface *intf,
  	if (id->driver_info & BTUSB_MARVELL)
  		hdev->set_bdaddr = btusb_set_bdaddr_marvell;
  
@@ -37,10 +38,11 @@ diff -rupN a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
  	if (IS_ENABLED(CONFIG_BT_HCIBTUSB_MTK) &&
  	    (id->driver_info & BTUSB_MEDIATEK)) {
  		hdev->setup = btusb_mtk_setup;
-diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie.c b/drivers/net/wireless/marvell/mwifiex/pcie.c
---- a/drivers/net/wireless/marvell/mwifiex/pcie.c	2026-02-13 09:22:27.000000000 +0100
-+++ b/drivers/net/wireless/marvell/mwifiex/pcie.c	2026-02-13 17:15:24.053815382 +0100
-@@ -377,6 +377,7 @@ static int mwifiex_pcie_probe(struct pci
+diff --git a/drivers/net/wireless/marvell/mwifiex/pcie.c b/drivers/net/wireless/marvell/mwifiex/pcie.c
+index a760de1..ffd0c1f 100644
+--- a/drivers/net/wireless/marvell/mwifiex/pcie.c
++++ b/drivers/net/wireless/marvell/mwifiex/pcie.c
+@@ -377,6 +377,7 @@ static int mwifiex_pcie_probe(struct pci_dev *pdev,
  					const struct pci_device_id *ent)
  {
  	struct pcie_service_card *card;
@@ -48,7 +50,7 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie.c b/drivers/net/wireless/
  	int ret;
  
  	pr_debug("info: vendor=0x%4.04X device=0x%4.04X rev=%d\n",
-@@ -418,6 +419,12 @@ static int mwifiex_pcie_probe(struct pci
+@@ -418,6 +419,12 @@ static int mwifiex_pcie_probe(struct pci_dev *pdev,
  		return -1;
  	}
  
@@ -61,7 +63,7 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie.c b/drivers/net/wireless/
  	return 0;
  }
  
-@@ -1702,9 +1709,21 @@ mwifiex_pcie_send_boot_cmd(struct mwifie
+@@ -1702,9 +1709,21 @@ mwifiex_pcie_send_boot_cmd(struct mwifiex_adapter *adapter, struct sk_buff *skb)
  static void mwifiex_pcie_init_fw_port(struct mwifiex_adapter *adapter)
  {
  	struct pcie_service_card *card = adapter->card;
@@ -83,10 +85,11 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie.c b/drivers/net/wireless/
  	/* Write the RX ring read pointer in to reg->rx_rdptr */
  	mwifiex_write_reg(adapter, reg->rx_rdptr, card->rxbd_rdptr | tx_wrap);
  }
-diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c
---- a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c	2026-02-13 09:22:27.000000000 +0100
-+++ b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c	2026-02-13 17:15:24.057805912 +0100
-@@ -13,7 +13,9 @@ static const struct dmi_system_id mwifie
+diff --git a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c
+index dd6d21f..99b024e 100644
+--- a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c
++++ b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c
+@@ -13,7 +13,9 @@ static const struct dmi_system_id mwifiex_quirk_table[] = {
  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
  			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Surface Pro 4"),
  		},
@@ -97,7 +100,7 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wi
  	},
  	{
  		.ident = "Surface Pro 5",
-@@ -22,7 +24,9 @@ static const struct dmi_system_id mwifie
+@@ -22,7 +24,9 @@ static const struct dmi_system_id mwifiex_quirk_table[] = {
  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
  			DMI_EXACT_MATCH(DMI_PRODUCT_SKU, "Surface_Pro_1796"),
  		},
@@ -108,7 +111,7 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wi
  	},
  	{
  		.ident = "Surface Pro 5 (LTE)",
-@@ -31,7 +35,9 @@ static const struct dmi_system_id mwifie
+@@ -31,7 +35,9 @@ static const struct dmi_system_id mwifiex_quirk_table[] = {
  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
  			DMI_EXACT_MATCH(DMI_PRODUCT_SKU, "Surface_Pro_1807"),
  		},
@@ -119,7 +122,7 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wi
  	},
  	{
  		.ident = "Surface Pro 6",
-@@ -39,7 +45,9 @@ static const struct dmi_system_id mwifie
+@@ -39,7 +45,9 @@ static const struct dmi_system_id mwifiex_quirk_table[] = {
  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
  			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Surface Pro 6"),
  		},
@@ -130,7 +133,7 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wi
  	},
  	{
  		.ident = "Surface Book 1",
-@@ -47,7 +55,9 @@ static const struct dmi_system_id mwifie
+@@ -47,7 +55,9 @@ static const struct dmi_system_id mwifiex_quirk_table[] = {
  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
  			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Surface Book"),
  		},
@@ -141,7 +144,7 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wi
  	},
  	{
  		.ident = "Surface Book 2",
-@@ -55,7 +65,9 @@ static const struct dmi_system_id mwifie
+@@ -55,7 +65,9 @@ static const struct dmi_system_id mwifiex_quirk_table[] = {
  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
  			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Surface Book 2"),
  		},
@@ -152,7 +155,7 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wi
  	},
  	{
  		.ident = "Surface Laptop 1",
-@@ -63,7 +75,9 @@ static const struct dmi_system_id mwifie
+@@ -63,7 +75,9 @@ static const struct dmi_system_id mwifiex_quirk_table[] = {
  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
  			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Surface Laptop"),
  		},
@@ -163,7 +166,7 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wi
  	},
  	{
  		.ident = "Surface Laptop 2",
-@@ -71,7 +85,9 @@ static const struct dmi_system_id mwifie
+@@ -71,7 +85,9 @@ static const struct dmi_system_id mwifiex_quirk_table[] = {
  			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
  			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Surface Laptop 2"),
  		},
@@ -174,7 +177,7 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wi
  	},
  	{}
  };
-@@ -89,6 +105,11 @@ void mwifiex_initialize_quirks(struct pc
+@@ -89,6 +105,11 @@ void mwifiex_initialize_quirks(struct pcie_service_card *card)
  		dev_info(&pdev->dev, "no quirks enabled\n");
  	if (card->quirks & QUIRK_FW_RST_D3COLD)
  		dev_info(&pdev->dev, "quirk reset_d3cold enabled\n");
@@ -186,9 +189,10 @@ diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.c b/drivers/net/wi
  }
  
  static void mwifiex_pcie_set_power_d3cold(struct pci_dev *pdev)
-diff -rupN a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h
---- a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h	2026-02-13 09:22:27.000000000 +0100
-+++ b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h	2026-02-13 17:15:24.058421495 +0100
+diff --git a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h
+index d6ff964..c14eb56 100644
+--- a/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h
++++ b/drivers/net/wireless/marvell/mwifiex/pcie_quirks.h
 @@ -4,6 +4,8 @@
  #include "pcie.h"
  
