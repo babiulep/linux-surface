@@ -1,0 +1,204 @@
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index b199f0c..b46d4c5 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -1217,6 +1217,14 @@ config HID_SUNPLUS
+ 	help
+ 	Support for Sunplus wireless desktop.
+ 
++config HID_SURFACE
++	tristate "Microsoft Surface"
++	depends on SURFACE_AGGREGATOR
++	help
++	Say Y here to enable HID driver for Microsoft Surface integrated
++	keyboard and touchpad. This driver filters out erroneous BTN_0
++	(FN key) events that can cause input focus issues.
++
+ config HID_RMI
+ 	tristate "Synaptics RMI4 device support"
+ 	select RMI4_CORE
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index 30970c7..e74f98f 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -182,6 +182,7 @@ obj-$(CONFIG_INTEL_ISH_HID)	+= intel-ish-hid/
+ obj-$(CONFIG_AMD_SFH_HID)       += amd-sfh-hid/
+ 
+ obj-$(CONFIG_SURFACE_HID_CORE)  += surface-hid/
++obj-$(CONFIG_HID_SURFACE)	+= hid-surface.o
+ 
+ obj-$(CONFIG_INTEL_THC_HID)     += intel-thc-hid/
+ 
+diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+index 7e067ce..44ad65e 100644
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -85,6 +85,7 @@ MODULE_LICENSE("GPL");
+ #define MT_QUIRK_KEEP_LATENCY_ON_CLOSE	BIT(25)
+ #define MT_QUIRK_HAS_TYPE_COVER_BACKLIGHT	BIT(26)
+ #define MT_QUIRK_HAS_TYPE_COVER_TABLET_MODE_SWITCH	BIT(27)
++#define MT_QUIRK_SKIP_MODESET_ON_HW_OPEN_CLOSE  BIT(28)
+ 
+ #define MT_INPUTMODE_TOUCHSCREEN	0x02
+ #define MT_INPUTMODE_TOUCHPAD		0x03
+@@ -248,6 +249,7 @@ static void mt_post_parse(struct mt_device *td, struct mt_application *app);
+ #define MT_CLS_YOGABOOK9I			0x0115
+ #define MT_CLS_EGALAX_P80H84			0x0116
+ #define MT_CLS_WIN_8_MS_SURFACE_TYPE_COVER	0x0117
++#define MT_CLS_SURFACE_TOUCHPAD                0x0118
+ #define MT_CLS_SIS				0x0457
+ 
+ #define MT_DEFAULT_MAXCONTACT	10
+@@ -481,6 +483,10 @@ static const struct mt_class mt_classes[] = {
+ 			MT_QUIRK_WIN8_PTP_BUTTONS,
+ 		.export_all_inputs = true
+ 	},
++	{ .name = MT_CLS_SURFACE_TOUCHPAD,
++		.quirks = MT_QUIRK_ALWAYS_VALID |
++			MT_QUIRK_SKIP_MODESET_ON_HW_OPEN_CLOSE
++	},
+ 	{ }
+ };
+ 
+@@ -2425,6 +2431,17 @@ static void mt_remove(struct hid_device *hdev)
+ 
+ static void mt_on_hid_hw_open(struct hid_device *hdev)
+ {
++	struct mt_device *td = hid_get_drvdata(hdev);
++
++	/*
++	 * Some devices (e.g. Surface Laptop Studio 2 touchpad) can get stuck
++	 * non-functional if we change touchpad reporting modes from the HID
++	 * open/close hooks. Avoid mode switching on hw_open/hw_close for
++	 * those devices.
++	 */
++	if (td && td->mtclass.quirks & MT_QUIRK_SKIP_MODESET_ON_HW_OPEN_CLOSE)
++		return;
++
+ 	mt_set_modes(hdev, HID_LATENCY_NORMAL, TOUCHPAD_REPORT_ALL);
+ }
+ 
+@@ -2432,6 +2449,15 @@ static void mt_on_hid_hw_close(struct hid_device *hdev)
+ {
+ 	struct mt_device *td = hid_get_drvdata(hdev);
+ 
++	/*
++	 * Some devices (e.g. Surface Laptop Studio 2 touchpad) can get stuck
++	 * non-functional if we change touchpad reporting modes from the HID
++	 * open/close hooks. Avoid mode switching on hw_open/hw_close for
++	 * those devices.
++	 */
++	if (td && td->mtclass.quirks & MT_QUIRK_SKIP_MODESET_ON_HW_OPEN_CLOSE)
++		return;
++
+ 	if (td->mtclass.quirks & MT_QUIRK_KEEP_LATENCY_ON_CLOSE)
+ 		mt_set_modes(hdev, HID_LATENCY_NORMAL, TOUCHPAD_REPORT_NONE);
+ 	else
+@@ -2889,6 +2915,11 @@ static const struct hid_device_id mt_devices[] = {
+ 		HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY,
+ 			USB_VENDOR_ID_MICROSOFT, 0x09c0) },
+ 
++	/* Microsoft Surface touch pad */
++	{ .driver_data = MT_CLS_SURFACE_TOUCHPAD,
++		HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY,
++			USB_VENDOR_ID_MICROSOFT, 0x0C46) },
++
+ 	/* Google MT devices */
+ 	{ .driver_data = MT_CLS_GOOGLE,
+ 		HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY, USB_VENDOR_ID_GOOGLE,
+diff --git b/drivers/hid/hid-surface.c b/drivers/hid/hid-surface.c
+new file mode 100644
+index 0000000..a171ea6
+--- /dev/null
++++ b/drivers/hid/hid-surface.c
+@@ -0,0 +1,90 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * HID driver for Microsoft Surface devices
++ *
++ * Copyright (c) 2025 Linux Surface Project
++ */
++
++#include <linux/device.h>
++#include <linux/hid.h>
++#include <linux/input.h>
++#include <linux/module.h>
++
++#include "hid-ids.h"
++
++/*
++ * The Surface Aggregator Module firmware incorrectly reports the FN key
++ * as BTN_0 (button 256). This button can get stuck in pressed state,
++ * flooding the input system and breaking focus tracking in some
++ * compositors. Filter out BTN_0 as FN should be handled as a hardware
++ * modifier, not reported to the OS.
++ */
++static int surface_input_mapping(struct hid_device *hdev, struct hid_input *hi,
++				  struct hid_field *field, struct hid_usage *usage,
++				  unsigned long **bit, int *max)
++{
++	/*
++	 * Filter BTN_0 during input mapping in case it appears in the
++	 * HID descriptor (defense in depth).
++	 */
++	if (usage->type == EV_KEY && usage->code == BTN_0)
++		return -1;  /* Don't map this usage */
++
++	return 0;  /* Use default mapping */
++}
++
++static int surface_event(struct hid_device *hdev, struct hid_field *field,
++			  struct hid_usage *usage, __s32 value)
++{
++	/*
++	 * The Surface Aggregator Module firmware reports the FN key as BTN_0
++	 * at runtime. This button can get stuck in pressed state, flooding
++	 * the input system and breaking focus tracking. Filter out these
++	 * events as FN should be a hardware modifier, not reported to the OS.
++	 */
++	if (usage->type == EV_KEY && usage->code == BTN_0)
++		return 1;  /* Event handled, don't process further */
++
++	return 0;  /* Process event normally */
++}
++
++static int surface_probe(struct hid_device *hdev, const struct hid_device_id *id)
++{
++	int ret;
++
++	ret = hid_parse(hdev);
++	if (ret) {
++		hid_err(hdev, "parse failed\n");
++		return ret;
++	}
++
++	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
++	if (ret) {
++		hid_err(hdev, "hw start failed\n");
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct hid_device_id surface_devices[] = {
++	{ HID_DEVICE(BUS_HOST, HID_GROUP_GENERIC,
++		     USB_VENDOR_ID_MICROSOFT, 0x09AE) },  /* Surface Keyboard */
++	{ HID_DEVICE(BUS_HOST, HID_GROUP_GENERIC,
++		     USB_VENDOR_ID_MICROSOFT, 0x09AF) },  /* Surface Mouse/Touchpad */
++	{ }
++};
++MODULE_DEVICE_TABLE(hid, surface_devices);
++
++static struct hid_driver surface_driver = {
++	.name = "surface",
++	.id_table = surface_devices,
++	.probe = surface_probe,
++	.input_mapping = surface_input_mapping,
++	.event = surface_event,
++};
++module_hid_driver(surface_driver);
++
++MODULE_AUTHOR("Linux Surface Project");
++MODULE_DESCRIPTION("Microsoft Surface HID driver");
++MODULE_LICENSE("GPL");
