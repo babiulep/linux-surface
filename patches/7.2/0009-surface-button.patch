@@ -1,4 +1,4 @@
-From a2b9a51620fbd423dc800ffee7abb49fc8555062 Mon Sep 17 00:00:00 2001
+From 84b70155c3df05c6944bb9f8ff4de4d70948b36c Mon Sep 17 00:00:00 2001
 From: Sachi King <nakato@nakato.io>
 Date: Tue, 5 Oct 2021 00:05:09 +1100
 Subject: [PATCH] Input: soc_button_array - support AMD variant Surface devices
@@ -73,9 +73,9 @@ index b8cad415c62c..43b5d56383e3 100644
  
  /*
 -- 
-2.54.0
+2.55.0
 
-From 4a2a3d0924679936cb2212f4aa0383ad5b68bef6 Mon Sep 17 00:00:00 2001
+From 369a1cd2a327681ca97cc408174218da042f24b2 Mon Sep 17 00:00:00 2001
 From: Sachi King <nakato@nakato.io>
 Date: Tue, 5 Oct 2021 00:22:57 +1100
 Subject: [PATCH] platform/surface: surfacepro3_button: don't load on amd
@@ -154,5 +154,5 @@ index 388a3e1a488c..00ee6b31cc66 100644
  
  	button = kzalloc_obj(struct surface_button);
 -- 
-2.54.0
+2.55.0
 
