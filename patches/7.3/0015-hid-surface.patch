@@ -1,8 +1,8 @@
 diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index b199f0c..b46d4c5 100644
+index e347d57..033d332 100644
 --- a/drivers/hid/Kconfig
 +++ b/drivers/hid/Kconfig
-@@ -1217,6 +1217,14 @@ config HID_SUNPLUS
+@@ -1218,6 +1218,14 @@ config HID_SUNPLUS
  	help
  	Support for Sunplus wireless desktop.
  
@@ -30,26 +30,26 @@ index 30970c7..e74f98f 100644
  obj-$(CONFIG_INTEL_THC_HID)     += intel-thc-hid/
  
 diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index 7e067ce..44ad65e 100644
+index 59cecdc..967fe20 100644
 --- a/drivers/hid/hid-multitouch.c
 +++ b/drivers/hid/hid-multitouch.c
-@@ -85,6 +85,7 @@ MODULE_LICENSE("GPL");
- #define MT_QUIRK_KEEP_LATENCY_ON_CLOSE	BIT(25)
- #define MT_QUIRK_HAS_TYPE_COVER_BACKLIGHT	BIT(26)
- #define MT_QUIRK_HAS_TYPE_COVER_TABLET_MODE_SWITCH	BIT(27)
-+#define MT_QUIRK_SKIP_MODESET_ON_HW_OPEN_CLOSE  BIT(28)
+@@ -86,6 +86,7 @@ MODULE_LICENSE("GPL");
+ #define MT_QUIRK_IGNORE_FEATURE_ID_MISMATCH	BIT(26)
+ #define MT_QUIRK_HAS_TYPE_COVER_BACKLIGHT	BIT(27)
+ #define MT_QUIRK_HAS_TYPE_COVER_TABLET_MODE_SWITCH	BIT(28)
++#define MT_QUIRK_SKIP_MODESET_ON_HW_OPEN_CLOSE  BIT(29)
  
  #define MT_INPUTMODE_TOUCHSCREEN	0x02
  #define MT_INPUTMODE_TOUCHPAD		0x03
-@@ -248,6 +249,7 @@ static void mt_post_parse(struct mt_device *td, struct mt_application *app);
- #define MT_CLS_YOGABOOK9I			0x0115
+@@ -250,6 +251,7 @@ static void mt_post_parse(struct mt_device *td, struct mt_application *app);
  #define MT_CLS_EGALAX_P80H84			0x0116
- #define MT_CLS_WIN_8_MS_SURFACE_TYPE_COVER	0x0117
-+#define MT_CLS_SURFACE_TOUCHPAD                0x0118
+ #define MT_CLS_ASUS_ROG_Z13_FOLIO		0x0117
+ #define MT_CLS_WIN_8_MS_SURFACE_TYPE_COVER	0x0118
++#define MT_CLS_SURFACE_TOUCHPAD                0x0119
  #define MT_CLS_SIS				0x0457
  
  #define MT_DEFAULT_MAXCONTACT	10
-@@ -481,6 +483,10 @@ static const struct mt_class mt_classes[] = {
+@@ -493,6 +495,10 @@ static const struct mt_class mt_classes[] = {
  			MT_QUIRK_WIN8_PTP_BUTTONS,
  		.export_all_inputs = true
  	},
@@ -60,7 +60,7 @@ index 7e067ce..44ad65e 100644
  	{ }
  };
  
-@@ -2425,6 +2431,17 @@ static void mt_remove(struct hid_device *hdev)
+@@ -2444,6 +2450,17 @@ static void mt_remove(struct hid_device *hdev)
  
  static void mt_on_hid_hw_open(struct hid_device *hdev)
  {
@@ -78,7 +78,7 @@ index 7e067ce..44ad65e 100644
  	mt_set_modes(hdev, HID_LATENCY_NORMAL, TOUCHPAD_REPORT_ALL);
  }
  
-@@ -2432,6 +2449,15 @@ static void mt_on_hid_hw_close(struct hid_device *hdev)
+@@ -2451,6 +2468,15 @@ static void mt_on_hid_hw_close(struct hid_device *hdev)
  {
  	struct mt_device *td = hid_get_drvdata(hdev);
  
@@ -94,7 +94,7 @@ index 7e067ce..44ad65e 100644
  	if (td->mtclass.quirks & MT_QUIRK_KEEP_LATENCY_ON_CLOSE)
  		mt_set_modes(hdev, HID_LATENCY_NORMAL, TOUCHPAD_REPORT_NONE);
  	else
-@@ -2889,6 +2915,11 @@ static const struct hid_device_id mt_devices[] = {
+@@ -2908,6 +2934,11 @@ static const struct hid_device_id mt_devices[] = {
  		HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY,
  			USB_VENDOR_ID_MICROSOFT, 0x09c0) },
  

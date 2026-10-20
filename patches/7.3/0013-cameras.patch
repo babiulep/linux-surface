@@ -13,7 +13,7 @@ index 163a3cc..5b520dd 100644
  	 * Do not enumerate devices with enumeration_by_parent flag set as
  	 * they will be enumerated by their respective parents.
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 73ebc64..42abd80 100644
+index 12139ac..e49ed68 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
 @@ -44,6 +44,13 @@
@@ -65,9 +65,9 @@ index 73ebc64..42abd80 100644
  	if (!dmar_map_ipts)
  		iommu_identity_mapping |= IDENTMAP_IPTS;
  
-@@ -3985,6 +4000,18 @@ static void quirk_iommu_igfx(struct pci_dev *dev)
- 	disable_igfx_iommu = 1;
- }
+@@ -3988,6 +4003,18 @@ static void quirk_iommu_igfx(struct pci_dev *dev)
+ /* Q35 integrated gfx dmar support is totally busted. */
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x29b2, quirk_iommu_igfx);
  
 +static void quirk_iommu_ipu(struct pci_dev *dev)
 +{
@@ -616,7 +616,7 @@ index 311c61d..a1a91b4 100644
  				     V4L2_CID_TEST_PATTERN,
  				     ARRAY_SIZE(ov7251_test_pattern_menu) - 1,
 diff --git a/drivers/media/pci/intel/ipu-bridge.c b/drivers/media/pci/intel/ipu-bridge.c
-index bd64c04..905f5d6 100644
+index bd64c04..903bb00 100644
 --- a/drivers/media/pci/intel/ipu-bridge.c
 +++ b/drivers/media/pci/intel/ipu-bridge.c
 @@ -63,6 +63,10 @@ static const struct ipu_sensor_config ipu_supported_sensors[] = {
@@ -630,10 +630,10 @@ index bd64c04..905f5d6 100644
  	/* Omnivision OV2740 */
  	IPU_SENSOR_CONFIG("INT3474", 1, 180000000),
  	/* Omnivision OV5670 */
-@@ -192,6 +196,20 @@ static const struct dmi_system_id upside_down_sensor_dmi_ids[] = {
- 		},
- 		.driver_data = "OVTI02E1",
- 	},
+@@ -110,6 +114,20 @@ static const struct ipu_sensor_config ipu_supported_sensors[] = {
+  * without reporting a rotation of 180° in neither the SSDB nor the _PLD.
+  */
+ static const struct dmi_system_id upside_down_sensor_dmi_ids[] = {
 +	{
 +		.matches = {
 +			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
@@ -648,9 +648,9 @@ index bd64c04..905f5d6 100644
 +		},
 +		.driver_data = "OVTI5693",
 +	},
- 	{} /* Terminating entry */
- };
- 
+ 	{
+ 		.matches = {
+ 			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
 diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
 index 460bf3d..d395f75 100644
 --- a/drivers/media/v4l2-core/v4l2-async.c
@@ -682,10 +682,10 @@ index 570df3c..8e9ae4b 100644
  	if (ret < 0)
  		goto out_cleanup;
 diff --git a/drivers/platform/x86/intel/int3472/discrete.c b/drivers/platform/x86/intel/int3472/discrete.c
-index 6c729fc..ee1b48a 100644
+index 6c729fc..8f17a26 100644
 --- a/drivers/platform/x86/intel/int3472/discrete.c
 +++ b/drivers/platform/x86/intel/int3472/discrete.c
-@@ -276,6 +276,14 @@ static void int3472_get_con_id_and_polarity(struct int3472_discrete_device *int3
+@@ -276,6 +276,10 @@ static void int3472_get_con_id_and_polarity(struct int3472_discrete_device *int3
  		/* Setups using a handshake pin need 25 ms enable delay */
  		*enable_time_us = 25 * USEC_PER_MSEC;
  		break;
@@ -693,38 +693,31 @@ index 6c729fc..ee1b48a 100644
 +		*con_id = "pwr1";
 +		*gpio_flags = GPIO_ACTIVE_HIGH;
 +		break;
-+	case 0x11:  /* Surface Pro 9 - secondary power rail */
-+		*con_id = "pwr2";
-+		*gpio_flags = GPIO_ACTIVE_HIGH;
-+		break;
  	default:
  		*con_id = "unknown";
  		*gpio_flags = GPIO_ACTIVE_HIGH;
-@@ -384,6 +392,8 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+@@ -384,6 +388,7 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
  	case INT3472_GPIO_TYPE_POWER_ENABLE:
  	case INT3472_GPIO_TYPE_DOVDD:
  	case INT3472_GPIO_TYPE_HANDSHAKE:
-+	case 0x08:  /* Surface Pro 9 power rails */
-+	case 0x11:
++	case 0x08:  /* Surface Pro 9 power rail */
  		gpio = skl_int3472_gpiod_get_from_temp_lookup(int3472, agpio, con_id, gpio_flags);
  		if (IS_ERR(gpio)) {
  			ret = PTR_ERR(gpio);
-@@ -416,6 +426,19 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
+@@ -416,6 +421,17 @@ static int skl_int3472_handle_gpio_resources(struct acpi_resource *ares,
  				err_msg = "Failed to register regulator\n";
  
  			break;
 +		case 0x08:  /* Surface Pro 9 - treat as power*/
 +		    dev_info(int3472->dev, "GPIO type 0x%02x detected on pin 0x%02x\n", type, agpio->pin_table[0]);
-+		    dev_info(int3472->dev, "  con_id=%s, flags=0x%x\n", con_id, gpio_flags);
++		    dev_info(int3472->dev, "  con_id=%s, flags=0x%lx\n", con_id, gpio_flags);
 +		    ret = skl_int3472_register_regulator(int3472, gpio,
 +			 GPIO_REGULATOR_ENABLE_TIME,
 +			 con_id, NULL);
 +		    dev_info(int3472->dev, "  register_regulator returned: %d\n", ret);
 +		    if (ret) {
-+			dev_err(int3472->dev, "Failed to register type 0x02x: %d\n", type, ret);
++			dev_err(int3472->dev, "Failed to register type 0x%02x: %d\n", type, ret);
 +		    }
-+		    break;
-+		case 0x11:
 +		    break;
  		default: /* Never reached */
  			ret = -EINVAL;

@@ -13,10 +13,10 @@ index e16aa59..562180f 100644
  
  	if (drv && drv->shutdown)
 diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index de9bbcc..12d4624 100644
+index 1aa87a3..0a9f0e2 100644
 --- a/drivers/pci/quirks.c
 +++ b/drivers/pci/quirks.c
-@@ -6423,3 +6423,52 @@ static void pci_mask_replay_timer_timeout(struct pci_dev *pdev)
+@@ -6446,3 +6446,52 @@ static void pci_mask_replay_timer_timeout(struct pci_dev *pdev)
  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_GLI, 0x9750, pci_mask_replay_timer_timeout);
  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_GLI, 0x9755, pci_mask_replay_timer_timeout);
  #endif
@@ -70,10 +70,10 @@ index de9bbcc..12d4624 100644
 +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0xa73e, quirk_no_shutdown);  // Thunderbolt 4 NHI
 +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0xa7a0, quirk_no_shutdown);  // GPU
 diff --git a/include/linux/pci.h b/include/linux/pci.h
-index d31a8d1..515773a 100644
+index 5ffcf5c..7e69ad9 100644
 --- a/include/linux/pci.h
 +++ b/include/linux/pci.h
-@@ -514,6 +514,7 @@ struct pci_dev {
+@@ -515,6 +515,7 @@ struct pci_dev {
  	unsigned int	rom_bar_overlap:1;	/* ROM BAR disable broken */
  	unsigned int	rom_attr_enabled:1;	/* Display of ROM attribute enabled? */
  	unsigned int	non_mappable_bars:1;	/* BARs can't be mapped by CPU or peers */

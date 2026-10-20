@@ -1,8 +1,8 @@
 diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 83807a9..b199f0c 100644
+index cc73aad..e347d57 100644
 --- a/drivers/hid/Kconfig
 +++ b/drivers/hid/Kconfig
-@@ -1536,6 +1536,8 @@ source "drivers/hid/intel-thc-hid/Kconfig"
+@@ -1537,6 +1537,8 @@ source "drivers/hid/intel-thc-hid/Kconfig"
  
  source "drivers/hid/ipts/Kconfig"
  

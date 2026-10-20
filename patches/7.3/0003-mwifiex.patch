@@ -1,5 +1,5 @@
 diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index dc7191b..015d954 100644
+index 2154ad8..e5e6120 100644
 --- a/drivers/bluetooth/btusb.c
 +++ b/drivers/bluetooth/btusb.c
 @@ -69,6 +69,7 @@ static struct usb_driver btusb_driver;
@@ -18,7 +18,7 @@ index dc7191b..015d954 100644
  
  	/*
  	 * NXP IW610 BT interfaces (Marvell-lineage silicon, same quirk as
-@@ -4380,6 +4382,19 @@ static int btusb_probe(struct usb_interface *intf,
+@@ -4384,6 +4386,19 @@ static int btusb_probe(struct usb_interface *intf,
  	if (id->driver_info & BTUSB_MARVELL)
  		hdev->set_bdaddr = btusb_set_bdaddr_marvell;
  

@@ -1,8 +1,8 @@
 diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 33cd309..00cec5e 100644
+index a7b128f..1e43f30 100644
 --- a/Documentation/admin-guide/kernel-parameters.txt
 +++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3589,6 +3589,11 @@ Kernel parameters
+@@ -3598,6 +3598,11 @@ Kernel parameters
  			to extract confidential information from the kernel
  			are also disabled.
  
@@ -31,7 +31,7 @@ index 9bea5a1..25848f8 100644
  	.long	0				# SizeOfStackReserve
  	.long	0				# SizeOfStackCommit
 diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index d2479c6..a1ef8b0 100644
+index e89fac5..6bed72b 100644
 --- a/kernel/power/hibernate.c
 +++ b/kernel/power/hibernate.c
 @@ -38,6 +38,7 @@
@@ -42,7 +42,7 @@ index d2479c6..a1ef8b0 100644
  static int nocompress;
  static int noresume;
  static int nohibernate;
-@@ -109,7 +110,7 @@ bool hibernation_in_progress(void)
+@@ -111,7 +112,7 @@ bool hibernation_in_progress(void)
  bool hibernation_available(void)
  {
  	return nohibernate == 0 &&
@@ -51,7 +51,7 @@ index d2479c6..a1ef8b0 100644
  		!secretmem_active() && !cxl_mem_active();
  }
  
-@@ -1465,6 +1466,12 @@ static int __init nohibernate_setup(char *str)
+@@ -1497,6 +1498,12 @@ static int __init nohibernate_setup(char *str)
  	return 1;
  }
  
@@ -64,7 +64,7 @@ index d2479c6..a1ef8b0 100644
  static const char * const comp_alg_enabled[] = {
  #if IS_ENABLED(CONFIG_CRYPTO_LZO)
  	COMPRESSION_ALGO_LZO,
-@@ -1522,3 +1529,4 @@ __setup("hibernate=", hibernate_setup);
+@@ -1554,3 +1561,4 @@ __setup("hibernate=", hibernate_setup);
  __setup("resumewait", resumewait_setup);
  __setup("resumedelay=", resumedelay_setup);
  __setup("nohibernate", nohibernate_setup);

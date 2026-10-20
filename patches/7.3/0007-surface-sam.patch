@@ -1,20 +1,19 @@
-From 36278bfa4989e960c5ad96c17dccd9b3dd02d095 Mon Sep 17 00:00:00 2001
-From: Maximilian Luz <luzmaximilian@gmail.com>
-Date: Fri, 17 Jun 2022 02:14:00 +0200
-Subject: [PATCH] rtc: Add basic support for RTC via Surface System Aggregator
- Module
-
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
-Patchset: surface-sam
----
- drivers/rtc/Kconfig       |   7 +++
- drivers/rtc/Makefile      |   1 +
- drivers/rtc/rtc-surface.c | 129 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 137 insertions(+)
- create mode 100644 drivers/rtc/rtc-surface.c
-
+diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
+index d37a7e4..e0c07e5 100644
+--- a/drivers/platform/surface/surface_aggregator_registry.c
++++ b/drivers/platform/surface/surface_aggregator_registry.c
+@@ -487,6 +487,9 @@ static const struct acpi_device_id ssam_platform_hub_acpi_match[] = {
+ 	/* Surface Laptop 6 */
+ 	{ "MSHW0530", (unsigned long)ssam_node_group_sl6 },
+ 
++	/* Surface Laptop 7 */
++	{ "MSHW0551", (unsigned long)ssam_node_group_sl7 },
++
+ 	/* Surface Laptop Go 1 */
+ 	{ "MSHW0118", (unsigned long)ssam_node_group_slg1 },
+ 
 diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 01def8231873..9580bc4bbb02 100644
+index 05b9233..abe2c85 100644
 --- a/drivers/rtc/Kconfig
 +++ b/drivers/rtc/Kconfig
 @@ -1425,6 +1425,13 @@ config RTC_DRV_NTXEC
@@ -32,7 +31,7 @@ index 01def8231873..9580bc4bbb02 100644
  
  config RTC_DRV_ASM9260
 diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 0347645b021f..34f2cacd017a 100644
+index 0347645..34f2cac 100644
 --- a/drivers/rtc/Makefile
 +++ b/drivers/rtc/Makefile
 @@ -185,6 +185,7 @@ obj-$(CONFIG_RTC_DRV_SUN4V)	+= rtc-sun4v.o
@@ -43,9 +42,9 @@ index 0347645b021f..34f2cacd017a 100644
  obj-$(CONFIG_RTC_DRV_TEGRA)	+= rtc-tegra.o
  obj-$(CONFIG_RTC_DRV_TEST)	+= rtc-test.o
  obj-$(CONFIG_RTC_DRV_TI_K3)	+= rtc-ti-k3.o
-diff --git a/drivers/rtc/rtc-surface.c b/drivers/rtc/rtc-surface.c
+diff --git b/drivers/rtc/rtc-surface.c b/drivers/rtc/rtc-surface.c
 new file mode 100644
-index 000000000000..f6c17c4e98d5
+index 0000000..f6c17c4
 --- /dev/null
 +++ b/drivers/rtc/rtc-surface.c
 @@ -0,0 +1,129 @@
@@ -178,34 +177,3 @@ index 000000000000..f6c17c4e98d5
 +MODULE_AUTHOR("Maximilian Luz <luzmaximilian@gmail.com>");
 +MODULE_DESCRIPTION("RTC driver for Surface System Aggregator Module");
 +MODULE_LICENSE("GPL");
--- 
-2.55.0
-
-From cc8336e44b7896f64cf78f61681759df819ef7e1 Mon Sep 17 00:00:00 2001
-From: Maximilian Luz <luzmaximilian@gmail.com>
-Date: Sun, 20 Apr 2025 01:05:14 +0200
-Subject: [PATCH] platform/surface: aggregator_registry: Add Surface Laptop 7
- (ACPI)
-
-Patchset: surface-sam
----
- drivers/platform/surface/surface_aggregator_registry.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
-index d37a7e4c6b02..e0c07e5d8ec4 100644
---- a/drivers/platform/surface/surface_aggregator_registry.c
-+++ b/drivers/platform/surface/surface_aggregator_registry.c
-@@ -487,6 +487,9 @@ static const struct acpi_device_id ssam_platform_hub_acpi_match[] = {
- 	/* Surface Laptop 6 */
- 	{ "MSHW0530", (unsigned long)ssam_node_group_sl6 },
- 
-+	/* Surface Laptop 7 */
-+	{ "MSHW0551", (unsigned long)ssam_node_group_sl7 },
-+
- 	/* Surface Laptop Go 1 */
- 	{ "MSHW0118", (unsigned long)ssam_node_group_slg1 },
- 
--- 
-2.55.0
-

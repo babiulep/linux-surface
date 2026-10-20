@@ -1,8 +1,8 @@
 diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index a81bf51..83807a9 100644
+index c43e824..cc73aad 100644
 --- a/drivers/hid/Kconfig
 +++ b/drivers/hid/Kconfig
-@@ -1534,6 +1534,8 @@ source "drivers/hid/surface-hid/Kconfig"
+@@ -1535,6 +1535,8 @@ source "drivers/hid/surface-hid/Kconfig"
  
  source "drivers/hid/intel-thc-hid/Kconfig"
  
@@ -3027,7 +3027,7 @@ index 0000000..1f966b8
 +
 +#endif /* IPTS_THREAD_H */
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 2e3b3ab..73ebc64 100644
+index 2e3b3ab..12139ac 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
 @@ -39,6 +39,11 @@
@@ -3077,9 +3077,9 @@ index 2e3b3ab..73ebc64 100644
  	check_tylersburg_isoch();
  
  	/*
-@@ -3972,6 +3985,18 @@ static void quirk_iommu_igfx(struct pci_dev *dev)
- 	disable_igfx_iommu = 1;
- }
+@@ -3975,6 +3988,18 @@ static void quirk_iommu_igfx(struct pci_dev *dev)
+ /* Q35 integrated gfx dmar support is totally busted. */
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x29b2, quirk_iommu_igfx);
  
 +static void quirk_iommu_ipts(struct pci_dev *dev)
 +{
@@ -3093,9 +3093,9 @@ index 2e3b3ab..73ebc64 100644
 +	dmar_map_ipts = 0;
 +}
 +
- /* Q35 integrated gfx dmar support is totally busted. */
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x29b2, quirk_iommu_igfx);
- 
+ /* G4x/GM45 integrated gfx dmar support is totally busted. */
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x2a40, quirk_iommu_igfx);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x2e00, quirk_iommu_igfx);
 @@ -4013,6 +4038,10 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x1632, quirk_iommu_igfx);
  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x163A, quirk_iommu_igfx);
  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x163D, quirk_iommu_igfx);

@@ -52,7 +52,7 @@ index 0642436..aa86f00 100644
  
  /*
 diff --git a/drivers/platform/surface/surfacepro3_button.c b/drivers/platform/surface/surfacepro3_button.c
-index b38aa01..6b95ed0 100644
+index b38aa01..add5d00 100644
 --- a/drivers/platform/surface/surfacepro3_button.c
 +++ b/drivers/platform/surface/surfacepro3_button.c
 @@ -148,37 +148,18 @@ static int surface_button_resume(struct device *dev)
@@ -66,8 +66,7 @@ index b38aa01..6b95ed0 100644
   * Returns true if the driver should bind to this device, i.e. the device is
   * either MSWH0028 (Pro 3) or MSHW0040 on a Pro 4 or Book 1.
   */
--static bool surface_button_check_MSHW0040(struct device *dev, acpi_handle handle)
-+static bool surface_button_check_MSHW0040(acpi_handle handle)
+ static bool surface_button_check_MSHW0040(struct device *dev, acpi_handle handle)
  {
 -	union acpi_object *result;
 -	u64 oem_platform_rev = 0;	// valid revisions are nonzero
@@ -100,12 +99,3 @@ index b38aa01..6b95ed0 100644
  }
  
  
-@@ -197,7 +178,7 @@ static int surface_button_probe(struct platform_device *pdev)
- 	    strlen(SURFACE_BUTTON_OBJ_NAME)))
- 		return -ENODEV;
- 
--	if (!surface_button_check_MSHW0040(&pdev->dev, device->handle))
-+	if (!surface_button_check_MSHW0040(device->handle))
- 		return -ENODEV;
- 
- 	button = kzalloc_obj(struct surface_button);
