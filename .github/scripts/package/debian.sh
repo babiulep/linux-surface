@@ -18,6 +18,8 @@ apt-get()
 MAINLINE_REPO="git://git.launchpad.net/~ubuntu-kernel-test/ubuntu/+source/linux/+git/mainline-crack"
 MAINLINE_BRANCH="cod/mainline"
 
+LLVM_VERSION="18"
+
 case "${1:-}" in
 setup-builddeps)
     export PATH="$HOME/.cargo/bin:$PATH"
@@ -31,9 +33,16 @@ setup-builddeps)
     apt-get update
     apt-get upgrade
     apt-get install build-essential fakeroot rsync git wget software-properties-common \
-            zstd lz4 sbsigntool debhelper dpkg-dev dpkg-sig pkg-config \
-            llvm-15 clang-15 libclang-15-dev 
+            zstd lz4 sbsigntool debhelper dpkg-dev dpkg-sig pkg-config
     apt-get build-dep linux
+
+    # install a recent LLVM / libclang (required by bindgen for building rust support)
+    wget -qO /etc/apt/trusted.gpg.d/apt.llvm.org.asc https://apt.llvm.org/llvm-snapshot.gpg.key
+    echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-${LLVM_VERSION} main" \
+        > /etc/apt/sources.list.d/llvm.list
+
+    apt-get update
+    apt-get install "llvm-${LLVM_VERSION}" "clang-${LLVM_VERSION}" "libclang-${LLVM_VERSION}-dev"
 
     # install python 3.11, required for configuring the kernel via Ubuntu's annotation format
     add-apt-repository -y ppa:deadsnakes
@@ -66,6 +75,7 @@ setup-secureboot)
     ;;
 build-packages)
     export PATH="$HOME/.cargo/bin:$PATH"
+    export LIBCLANG_PATH="/usr/lib/llvm-${LLVM_VERSION}/lib"
 
     pushd pkg/debian/kernel || exit 1
 
@@ -75,15 +85,21 @@ build-packages)
     git config --global user.name "surfacebot"
     git config --global user.email "surfacebot@users.noreply.github.com"
 
-    # get ubuntu mainline source
-    # see https://kernel.ubuntu.com/~kernel-ppa/mainline
-    git clone "${MAINLINE_REPO}" --branch "${MAINLINE_BRANCH}/v${KERNEL_VERSION}" --depth 1 linux
+    # get upstream kernel source
+    git clone "${MAINLINE_REPO}" --branch "v${KERNEL_VERSION}" --depth 1 linux
 
     if [ -d "keys" ]; then
         mv keys linux
     fi
 
     pushd linux || exit 1
+
+    # get packaging (and base config) from ubuntu mainline build
+    # see https://kernel.ubuntu.com/~kernel-ppa/mainline
+    git fetch --depth 1 "${MAINLINE_REPO}" \
+        "refs/tags/${MAINLINE_BRANCH}/v${UBUNTU_MAINLINE_VERSION:-${KERNEL_VERSION}}"
+    git checkout FETCH_HEAD -- debian debian.master
+    git commit -m "Add Ubuntu mainline packaging"
 
     # apply surface build/packaging patches
     find .. -name '*.patch' -type f -print0 | sort -z | xargs -0 -I '{}' \
