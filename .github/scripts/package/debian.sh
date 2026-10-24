@@ -15,8 +15,7 @@ apt-get()
     command apt-get -y "$@"
 }
 
-MAINLINE_REPO="git://git.launchpad.net/~ubuntu-kernel-test/ubuntu/+source/linux/+git/mainline-crack"
-MAINLINE_BRANCH="cod/mainline"
+STABLE_REPO="https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
 
 LLVM_VERSION="18"
 
@@ -86,20 +85,13 @@ build-packages)
     git config --global user.email "surfacebot@users.noreply.github.com"
 
     # get upstream kernel source
-    git clone "${MAINLINE_REPO}" --branch "v${KERNEL_VERSION}" --depth 1 linux
+    git clone "${STABLE_REPO}" --branch "v${KERNEL_VERSION}" --depth 1 linux
 
     if [ -d "keys" ]; then
         mv keys linux
     fi
 
     pushd linux || exit 1
-
-    # get packaging (and base config) from ubuntu mainline build
-    # see https://kernel.ubuntu.com/~kernel-ppa/mainline
-    git fetch --depth 1 "${MAINLINE_REPO}" \
-        "refs/tags/${MAINLINE_BRANCH}/v${UBUNTU_MAINLINE_VERSION:-${KERNEL_VERSION}}"
-    git checkout FETCH_HEAD -- debian debian.master
-    git commit -m "Add Ubuntu mainline packaging"
 
     # apply surface build/packaging patches
     find .. -name '*.patch' -type f -print0 | sort -z | xargs -0 -I '{}' \
@@ -118,23 +110,23 @@ build-packages)
     git add .
     git commit --allow-empty -m "Apply linux-surface patches"
 
-    # generate base config
-    ./debian/scripts/misc/annotations --arch amd64 --flavour generic --export > ../base.config
-
-    # merge configs
+    # merge configs, the base config is taken from the Ubuntu mainline build
+    # (see UBUNTU_MAINLINE_VERSION and https://kernel.ubuntu.com/mainline)
     ./scripts/kconfig/merge_config.sh \
-        ../base.config \
+        ../config.amd64 \
         ../ubuntu.config \
         "../../../../configs/surface-${KERNEL_MAJORVER}.config"
     
     # Explicitly set package version, including revision. This is picked up by 'make bindeb-pkg'.
-    export KDEB_PKGVERSION="${KERNEL_VERSION}${KERNEL_LOCALVERSION}-${KERNEL_REVISION}"
+    export KDEB_PKGVERSION="${KERNEL_VERSION}-${KERNEL_REVISION}"
     
     # The DPKG in Ubuntu 22.04 defaults to using ZSTD, which is not yet supported by the DPKG in Debian 11
     export KDEB_COMPRESS="xz"
 
-    # Set kernel localversion
-    export LOCALVERSION="${KERNEL_LOCALVERSION}-${KERNEL_REVISION}"
+    # Set kernel localversion. Following the Debian/Ubuntu convention, the
+    # kernel release has to end with the flavour (e.g. 7.2.11-1-surface), as
+    # some tools (e.g. live-build) rely on that.
+    export LOCALVERSION="-${KERNEL_REVISION}${KERNEL_LOCALVERSION}"
 
     # Get debug info for rust
     make rustavailable
@@ -146,7 +138,7 @@ build-packages)
 
     pushd pkg/debian/meta || exit 1
 
-    ./mkdebian.sh "$(make -C ../kernel/linux -s kernelrelease)"
+    ./mkdebian.sh "$(make -C ../kernel/linux -s kernelrelease)" "${KDEB_PKGVERSION}"
     dpkg-buildpackage -b -Zxz
 
     popd || exit 1
