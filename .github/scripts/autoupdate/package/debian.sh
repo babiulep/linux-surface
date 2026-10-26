@@ -3,10 +3,11 @@
 # Debian package update helper
 #
 # Usage:
-#   debian.sh current          Print the currently packaged version
-#   debian.sh latest           Print the latest upstream versions for the series
-#   debian.sh check <version>  Check whether upstream sources for <version> exist
-#   debian.sh update <version> Update the package to <version>
+#   debian.sh current           Print the currently packaged version
+#   debian.sh latest [<series>] Print the latest upstream versions for the series
+#                               (default: the currently packaged one)
+#   debian.sh check <version>   Check whether upstream sources for <version> exist
+#   debian.sh update <version>  Update the package to <version>
 #
 # The update command bumps the kernel version (or, if <version> is already
 # packaged, the package revision), updates the base config to the latest
@@ -57,7 +58,8 @@ source_versions()
     remote_tags "${STABLE_REPO}" "v${series}." "v$(regex_escape "${series}")\.[0-9]+" | sed 's/^v//'
 }
 
-# List the Ubuntu mainline build versions of a series.
+# List the Ubuntu mainline build versions of a series. This includes the build
+# of the initial release (vX.Y), which may be the only one of a new series.
 packaging_versions()
 {
     local series="$1"
@@ -68,7 +70,7 @@ packaging_versions()
         return 1
     fi
 
-    echo "${listing}" | grep -oE "href=\"v$(regex_escape "${series}")\.[0-9]+/\"" \
+    echo "${listing}" | { grep -oE "href=\"v$(regex_escape "${series}")(\.[0-9]+)?/\"" || true; } \
         | sed -E 's/href="v(.*)\/"/\1/' | sort -uV
 }
 
@@ -93,16 +95,20 @@ headers_url()
 }
 
 # Determine the Ubuntu mainline build to take the base config from: the latest
-# one with amd64 packages that is not newer than the kernel version. If
-# kernel.ubuntu.com is unavailable, keep the current one, as it may lag behind
-# anyway.
+# one of the series with amd64 packages that is not newer than the kernel
+# version. If there is none (e.g. for a new series), or kernel.ubuntu.com is
+# unavailable, keep the current one, as it may lag behind anyway. Options
+# missing in an older base config are set to their defaults when building.
 resolve_packaging()
 {
     local version="$1"
+    local series
     local versions
     local v
 
-    if ! versions="$(packaging_versions "$(version_series "${version}")")"; then
+    series="$(version_series "${version}")"
+
+    if ! versions="$(packaging_versions "${series}")"; then
         log "WARNING: Could not list Ubuntu mainline builds, keeping the current one"
         conf_var UBUNTU_MAINLINE_VERSION
         return
@@ -114,6 +120,9 @@ resolve_packaging()
             return
         fi
     done
+
+    log "WARNING: No Ubuntu mainline build for ${series} yet, keeping the current one"
+    conf_var UBUNTU_MAINLINE_VERSION
 }
 
 # Extract the kernel config of an Ubuntu mainline build.
@@ -160,7 +169,7 @@ cmd_latest()
     local series
     local packaging
 
-    series="$(version_series "$(conf_var KERNEL_VERSION)")"
+    series="${1:-$(version_series "$(conf_var KERNEL_VERSION)")}"
 
     emit upstream "$(source_versions "${series}" | tail -n1)"
 
@@ -320,6 +329,13 @@ cmd_update()
     emit packaging "${packaging}"
     emit config_updated "${config_updated}"
 
+    # The base config is from an older series (no newer build available yet)
+    if [ "$(version_series "${packaging}")" != "${series}" ]; then
+        emit config_outdated 1
+    else
+        emit config_outdated 0
+    fi
+
     if [ "${refreshed}" -eq 1 ]; then
         emit refreshed "${PACKAGE_DIR#"${REPO_ROOT}"/}"
     else
@@ -332,7 +348,7 @@ current)
     cmd_current
     ;;
 latest)
-    cmd_latest
+    cmd_latest "${2:-}"
     ;;
 check)
     cmd_check "${2:-}"
@@ -341,6 +357,6 @@ update)
     cmd_update "${2:-}"
     ;;
 *)
-    die "Usage: $0 {current|latest|check <version>|update <version>}"
+    die "Usage: $0 {current|latest [<series>]|check <version>|update <version>}"
     ;;
 esac
